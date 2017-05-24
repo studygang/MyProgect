@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/bt_home" android:title="首页" android:icon="@drawable/home_button_selector"/>
+        <item android:id="@+id/bt_type" android:title="分类" android:icon="@drawable/type_button_selector"/>
+        <item android:id="@+id/bt_cart" android:title="购物车" android:icon="@drawable/cart_button_selector"/>
+        <item android:id="@+id/bt_me" android:title="个人中心" android:icon="@drawable/user_button_selector"/>
+    </group>
+</menu>
