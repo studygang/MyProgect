@@ -7,4 +7,17 @@
         <item android:id="@+id/bt_cart" android:title="购物车" android:icon="@drawable/cart_button_selector"/>
         <item android:id="@+id/bt_me" android:title="个人中心" android:icon="@drawable/user_button_selector"/>
     </group>
+    <item android:title="更多" android:id="@+id/more">
+        <menu >
+            <item android:id="@+id/about"
+                android:title="关于"
+                android:icon="@drawable/about">
+            </item>
+            <item android:id="@+id/out"
+                android:title="注销"
+                android:icon="@drawable/out">
+            </item>
+        </menu>
+    </item>
+
 </menu>
