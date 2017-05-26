@@ -1,19 +1,10 @@
 package com.gangzi.myprogect.ui.home.presenter.imp;
 
-import android.os.AsyncTask;
-
-import com.gangzi.myprogect.entity.News;
 import com.gangzi.myprogect.ui.home.model.HomeNewsModel;
 import com.gangzi.myprogect.ui.home.model.imp.HomeNewsModelImp;
 import com.gangzi.myprogect.ui.home.presenter.HomeNewsPresenter;
 import com.gangzi.myprogect.ui.home.view.HomeNewsView;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
-
-import java.util.List;
-import java.util.Map;
 
 import okhttp3.Call;
 
