@@ -7,13 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.gangzi.myprogect.R;
 import com.gangzi.myprogect.entity.News;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2017/5/26.
@@ -23,6 +26,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
 
     private Context mContext;
     private List<News.ResultBean.DataBean> list;
+    private Map<String,String> map=new HashMap<>();
 
     public NewsAdapter( Context mContext,List<News.ResultBean.DataBean> list) {
         this.mContext=mContext;
@@ -40,7 +44,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         setNewsItem(holder,position);
     }
 
-    private void setNewsItem(ViewHolder holder, int position) {
+    private void setNewsItem(ViewHolder holder, final int position) {
         News.ResultBean.DataBean data=list.get(position);
         String uniquekey=data.getUniquekey();
         String title=data.getTitle();
@@ -51,9 +55,26 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         String imageUrl=data.getThumbnail_pic_s();
         String imageUrl2=data.getThumbnail_pic_s02();
         String imageUrl3=data.getThumbnail_pic_s03();
+
+        map.put("uniquekey",uniquekey);
+        map.put("title",title);
+        map.put("category",category);
+        map.put("url",url);
+        map.put("author_name",author_name);
+
         holder.tv_tile.setText(title);
         holder.tv_time.setText(date);
         holder.tv_author.setText(author_name);
+
+        holder.mLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onItemClickListener!=null){
+                    onItemClickListener.onItemClickListener(position,map);
+                }
+            }
+        });
+
         if (TextUtils.isEmpty(imageUrl)){
             return;
         }else{
@@ -83,8 +104,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
 
         private TextView tv_tile,tv_time,tv_author;
         private ImageView iv_image,iv_image2,iv_image3;
+        private LinearLayout mLinearLayout;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
             tv_author= (TextView) itemView.findViewById(R.id.tv_author);
             tv_tile= (TextView) itemView.findViewById(R.id.tv_title);
@@ -92,10 +114,18 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
             iv_image= (ImageView) itemView.findViewById(R.id.iv_image1);
             iv_image2= (ImageView) itemView.findViewById(R.id.iv_image2);
             iv_image3= (ImageView) itemView.findViewById(R.id.iv_image3);
+            mLinearLayout= (LinearLayout) itemView.findViewById(R.id.linear);
         }
+
     }
-    private interface onItemClickListener{
-        void onItemClickListener(View view,int position);
+    public interface onItemClickListener{
+        void onItemClickListener(int position, Map<String,String> map);
     }
+
+    public void setOnItemClickListener(NewsAdapter.onItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    private onItemClickListener onItemClickListener;
 
 }
