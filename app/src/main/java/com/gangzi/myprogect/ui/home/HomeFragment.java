@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -16,15 +17,13 @@ import android.view.View;
 
 import com.gangzi.myprogect.MainActivity;
 import com.gangzi.myprogect.R;
-import com.gangzi.myprogect.adapter.HomeAdapter;
 import com.gangzi.myprogect.adapter.HomeAdapter2;
 import com.gangzi.myprogect.base.BaseFragment;
-import com.gangzi.myprogect.entity.FabSrcollBean;
 import com.gangzi.myprogect.entity.News;
 import com.gangzi.myprogect.ui.home.presenter.HomeNewsPresenter;
 import com.gangzi.myprogect.ui.home.presenter.imp.HomeNewsPresenterImp;
 import com.gangzi.myprogect.ui.home.view.HomeNewsView;
-import com.gangzi.myprogect.ui.news.view.NewsDetailActivity;
+import com.gangzi.myprogect.ui.news.view.imp.NewsDetailActivity;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -127,6 +126,7 @@ public class HomeFragment extends BaseFragment implements HomeNewsView,View.OnCl
         LinearLayoutManager manager=new LinearLayoutManager(mContext);
         //mRecyclerView.smoothScrollToPosition(0);
         mRecyclerView.setLayoutManager(manager);
+        //mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext,DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(mHomeAdapter);
         mHomeAdapter.setOnItemOnClickListener(new HomeAdapter2.onItemOnClickListener() {
             @Override

@@ -47,7 +47,7 @@ public class NewsViewPagerAdapter extends FragmentPagerAdapter {
 
     public void refreshFragment(FragmentManager manager, List<BaseFragment> list, List<String> strings) {
         this.mTitle=strings;
-        if (list!=null){
+        if (this.fragmentList!=null){
             FragmentTransaction ft=manager.beginTransaction();
             for (Fragment fragment:this.fragmentList){
                 ft.remove(fragment);

@@ -12,7 +12,7 @@ import android.widget.RadioGroup;
 import com.gangzi.myprogect.base.BaseFragment;
 import com.gangzi.myprogect.ui.cart.CartFragment;
 import com.gangzi.myprogect.ui.home.HomeFragment;
-import com.gangzi.myprogect.ui.type.TypeFragment;
+import com.gangzi.myprogect.ui.type.view.imp.TypeFragment;
 import com.gangzi.myprogect.ui.user.UserFragment;
 
 import java.util.ArrayList;

@@ -32,4 +32,5 @@
     <color name="color3F3F3F">#3F3F3F</color>
     <color name="color8A9599">#8A9599</color>
     <color name="color868686">#868686</color>
+    <color name="list_background">#11000000</color>
 </resources>

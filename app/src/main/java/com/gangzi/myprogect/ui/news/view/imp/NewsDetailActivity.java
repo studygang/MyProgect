@@ -1,4 +1,4 @@
-package com.gangzi.myprogect.ui.news.view;
+package com.gangzi.myprogect.ui.news.view.imp;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +10,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 import com.gangzi.myprogect.R;
 
@@ -22,6 +23,8 @@ public class NewsDetailActivity extends AppCompatActivity {
     WebView mWebView;
     @BindView(R.id.detail_toobar)
     Toolbar mToolbar;
+    @BindView(R.id.progress)
+    ProgressBar mProgressBar;
 
     private String category,url,title;
 
@@ -33,7 +36,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         url=getIntent().getStringExtra("url");
         category=getIntent().getStringExtra("category");
         title=getIntent().getStringExtra("title");
-
+        mProgressBar.setVisibility(View.VISIBLE);
         System.out.println("------url--------"+url);
         setToolBar();
         setWebView();
@@ -75,6 +78,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         settings.setDefaultTextEncodingName("utf-8");//设置编码格式
 
         mWebView.loadUrl(url);
+        mProgressBar.setVisibility(View.GONE);
 
         mWebView.setWebViewClient(new WebViewClient(){
             @Override

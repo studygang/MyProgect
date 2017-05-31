@@ -18,9 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.news.view.NewsActivity">
+        <activity android:name=".ui.news.view.imp.NewsActivity">
         </activity>
-        <activity android:name=".ui.news.view.NewsDetailActivity">
+        <activity android:name=".ui.news.view.imp.NewsDetailActivity">
         </activity>
     </application>
 

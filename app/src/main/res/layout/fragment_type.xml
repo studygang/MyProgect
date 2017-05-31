@@ -1,11 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-    <TextView
+                                               xmlns:app="http://schemas.android.com/apk/res-auto"
+                                               android:orientation="vertical"
+                                               android:layout_width="match_parent"
+                                               android:layout_height="match_parent">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/type_toobar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="type"/>
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
+    </android.support.v7.widget.Toolbar>
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <ListView
+            android:id="@+id/list_left"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="#11000000"
+            android:scrollbars="none"
+            app:layout_widthPercent="25%"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/rv_right_swiprefresh"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/list_left"
+            app:layout_widthPercent="75%" >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            />
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </android.support.percent.PercentRelativeLayout>
 
 </LinearLayout>

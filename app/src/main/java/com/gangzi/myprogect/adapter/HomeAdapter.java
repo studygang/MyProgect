@@ -7,14 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.gangzi.myprogect.R;
 import com.gangzi.myprogect.entity.News;
-import com.gangzi.myprogect.ui.news.view.NewsActivity;
-import com.gangzi.myprogect.ui.news.view.NewsDetailActivity;
+import com.gangzi.myprogect.ui.news.view.imp.NewsActivity;
+import com.gangzi.myprogect.ui.news.view.imp.NewsDetailActivity;
 
 import java.util.List;
 import java.util.Map;

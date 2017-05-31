@@ -1,4 +1,4 @@
-package com.gangzi.myprogect.ui.news.view;
+package com.gangzi.myprogect.ui.news.view.imp;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -12,6 +12,7 @@ import android.view.View;
 import com.gangzi.myprogect.R;
 import com.gangzi.myprogect.adapter.NewsViewPagerAdapter;
 import com.gangzi.myprogect.base.BaseFragment;
+import com.gangzi.myprogect.ui.news.view.imp.NewsFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
