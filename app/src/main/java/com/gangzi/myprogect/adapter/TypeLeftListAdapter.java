@@ -1,6 +1,7 @@
 package com.gangzi.myprogect.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ public class TypeLeftListAdapter extends BaseAdapter {
     private String[] pinyin;
     private LayoutInflater mInflater;
 
-    private int selectedPosition = -1;// 选中的位置
+    private int selectedPosition =0;// 选中的位置
 
     public void setSelected(boolean selected) {
         isSelected = selected;
@@ -62,15 +63,23 @@ public class TypeLeftListAdapter extends BaseAdapter {
         }
         holder.tv_text= (TextView) view.findViewById(R.id.tv_text);
         holder.tv_text.setText(chinese[i]);
-      /*  if (selectedPosition==i){
-           // setSelected(true);
-            view.setBackgroundResource(R.color.red);
-        }else{
-           // setSelected(false);
-            view.setBackgroundResource(R.color.list_background);
-        }*/
+        if (selectedPosition == i) {
+            view.setBackgroundResource(R.drawable.type_item_background_selector);  //选中项背景
+            holder.tv_text.setTextColor(Color.parseColor("#fd3f3f"));
+        } else {
+            view.setBackgroundResource(R.drawable.bg2);  //其他项背景
+            holder.tv_text.setTextColor(Color.parseColor("#323437"));
+        }
         return view;
     }
+
+    public void changeSelected(int position){
+        if (position!=selectedPosition){
+            selectedPosition=position;
+            notifyDataSetChanged();
+        }
+    }
+
     class ViewHolder{
         private TextView tv_text;
     }

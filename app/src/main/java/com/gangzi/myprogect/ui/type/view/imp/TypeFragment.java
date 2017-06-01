@@ -77,8 +77,21 @@ public class TypeFragment extends BaseFragment implements NewsTypeView,SwipeRefr
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> view, View view1, int i, long l) {
-               // view1.setBackgroundResource(R.color.red);
+                System.out.println("-------type----"+pinyin[i]);
+                mListAdapter.changeSelected(i);
                 mPresenter.requestNews(url,pinyin[i],key);
+                mListAdapter.notifyDataSetChanged();
+            }
+        });
+        mListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> view, View view1, int i, long l) {
+                mListAdapter.changeSelected(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> view) {
+
             }
         });
     }
