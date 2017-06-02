@@ -1,5 +1,7 @@
 package com.gangzi.myprogect;
 
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -115,5 +117,20 @@ public class MainActivity extends AppCompatActivity {
 
     public static DrawerLayout getDrawerLayout(){
         return null;
+    }
+
+    /**
+     * 得到渠道
+     * @return
+     */
+    private String getChannel(){
+        PackageManager packageManager=getPackageManager();
+        try {
+            ApplicationInfo applicationInfo=packageManager.getApplicationInfo(getPackageName(),PackageManager.GET_META_DATA);
+            return applicationInfo.metaData.getString("UMENG_CHANNEL");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
