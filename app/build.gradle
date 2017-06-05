@@ -19,7 +19,7 @@ android {
         }
     }
     //打包方式一
-   /* productFlavors{
+    /* productFlavors{
         wandoujia{
             manifestPlaceholders=[UMENG_CHANNEL_VALUE:"wandoujia"]
         }
@@ -46,28 +46,29 @@ android {
         }
     }*/
     //优化2
-    productFlavors{
-        xiaomi{
+    productFlavors {
+        xiaomi {
 
         }
-        wandoujia{
+        wandoujia {
 
         }
-        yingyongbao{
+        yingyongbao {
 
         }
-        productFlavors.all{
-            flavor->flavor.manifestPlaceholders=[UMENG_CHANNEL_VALUE:name]
+        productFlavors.all {
+            flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
         }
-        applicationVariants.all{
-            variant->variant.outputs.each{
-                output->
-                    def outputFile=output.outputFile
-                    if (outputFile!=null&&outputFile.name.endsWith('.apk')){
-                        def fileName=outputFile.name.replace(".apk","-${defaultConfig.versionName}.apk")
-                        output.outputFile=new File(outputFile.parent,fileName)
-                    }
-            }
+        applicationVariants.all {
+            variant ->
+                variant.outputs.each {
+                    output ->
+                        def outputFile = output.outputFile
+                        if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                            def fileName = outputFile.name.replace(".apk", "-${defaultConfig.versionName}.apk")
+                            output.outputFile = new File(outputFile.parent, fileName)
+                        }
+                }
         }
     }
 }
@@ -101,8 +102,8 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.zhy:okhttputils:2.6.2'
-    testCompile 'junit:junit:4.12'
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:percent:25.3.1'
+    testCompile 'junit:junit:4.12'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
 }
