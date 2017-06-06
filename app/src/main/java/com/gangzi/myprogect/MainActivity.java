@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.gangzi.myprogect.base.BaseFragment;
 import com.gangzi.myprogect.ui.cart.CartFragment;
@@ -18,6 +19,8 @@ import com.gangzi.myprogect.ui.type.view.imp.TypeFragment;
 import com.gangzi.myprogect.ui.user.UserFragment;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -132,5 +135,24 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return "";
+    }
+
+    private boolean mBackKeyPressed = false;// 记录是否有首次按键
+
+    @Override
+    public void onBackPressed() {
+        if (!mBackKeyPressed){
+            Toast.makeText(this,"再按一次退出程序",Toast.LENGTH_SHORT).show();
+            mBackKeyPressed=true;
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    mBackKeyPressed=false;
+                }
+            },2000);
+        }else{
+            this.finish();
+            System.exit(0);
+        }
     }
 }

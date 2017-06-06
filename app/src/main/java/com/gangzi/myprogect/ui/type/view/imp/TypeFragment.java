@@ -23,6 +23,7 @@ import com.gangzi.myprogect.ui.news.view.imp.NewsDetailActivity;
 import com.gangzi.myprogect.ui.type.presenter.NewsTypePresenter;
 import com.gangzi.myprogect.ui.type.presenter.imp.NewsTypePresenterImp;
 import com.gangzi.myprogect.ui.type.view.NewsTypeView;
+import com.gangzi.myprogect.utils.MyProgressDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -54,6 +55,7 @@ public class TypeFragment extends BaseFragment implements NewsTypeView,SwipeRefr
     private TypeLeftListAdapter mListAdapter;
     private NewsTypePresenter mPresenter;
     private NewsTypeAdapter mNewsTypeAdapter;
+    private MyProgressDialog mDialog;
 
     private String[] mTypesChinese = {"头条", "社会", "国内","国际","娱乐", "体育", "军事", "科技", "财经", "时尚"};
     private String[] pinyin={"top","shehui","guonei","guoji","yule","tiyu","junshi","keji","caijing","shishang"};
@@ -62,6 +64,8 @@ public class TypeFragment extends BaseFragment implements NewsTypeView,SwipeRefr
     public View initView() {
         View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_type,null);
         ButterKnife.bind(this,view);
+        mDialog=new MyProgressDialog(getActivity(),"正在加载中...");
+        mDialog.show();
         mPresenter=new NewsTypePresenterImp(this);
         setToolBar();
         mRefreshLayout.setOnRefreshListener(this);
@@ -115,6 +119,9 @@ public class TypeFragment extends BaseFragment implements NewsTypeView,SwipeRefr
         Gson gson=new Gson();
         News news= gson.fromJson(result,News.class);
         final List<News.ResultBean.DataBean> dataBeanList=news.getResult().getData();
+        if (dataBeanList!=null&&dataBeanList.size()>0){
+            mDialog.dismiss();
+        }
         mNewsTypeAdapter=new NewsTypeAdapter(mContext,dataBeanList);
         RecyclerView.LayoutManager manager=new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(manager);

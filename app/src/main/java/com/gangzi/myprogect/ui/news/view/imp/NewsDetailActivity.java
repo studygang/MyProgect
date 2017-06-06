@@ -13,6 +13,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.gangzi.myprogect.R;
+import com.gangzi.myprogect.utils.MyProgressDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,19 +28,26 @@ public class NewsDetailActivity extends AppCompatActivity {
     ProgressBar mProgressBar;
 
     private String category,url,title;
+    private MyProgressDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_detail);
         ButterKnife.bind(this);
+        mDialog=new MyProgressDialog(this,"正在加载中...");
+        mDialog.show();
         url=getIntent().getStringExtra("url");
         category=getIntent().getStringExtra("category");
         title=getIntent().getStringExtra("title");
         mProgressBar.setVisibility(View.VISIBLE);
         System.out.println("------url--------"+url);
         setToolBar();
-        setWebView();
+        if (url!=null||!url.equals("")){
+           // mDialog.dismiss();
+            setWebView();
+        }
+
     }
 
     private void setToolBar() {
@@ -76,13 +84,14 @@ public class NewsDetailActivity extends AppCompatActivity {
         settings.setJavaScriptCanOpenWindowsAutomatically(true); //支持通过JS打开新窗口
         settings.setLoadsImagesAutomatically(true); //支持自动加载图片
         settings.setDefaultTextEncodingName("utf-8");//设置编码格式
-
         mWebView.loadUrl(url);
+        mDialog.dismiss();
         mProgressBar.setVisibility(View.GONE);
 
         mWebView.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                mDialog.dismiss();
                 return super.shouldOverrideUrlLoading(view, request);
             }
         });

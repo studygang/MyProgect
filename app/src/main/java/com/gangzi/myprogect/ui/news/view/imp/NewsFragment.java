@@ -14,6 +14,7 @@ import com.gangzi.myprogect.entity.News;
 import com.gangzi.myprogect.ui.news.presenter.NewsTypeListPressenter;
 import com.gangzi.myprogect.ui.news.presenter.imp.NewsTypeListPressenterImp;
 import com.gangzi.myprogect.ui.news.view.NewsTypeListView;
+import com.gangzi.myprogect.utils.MyProgressDialog;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -39,10 +40,14 @@ public class NewsFragment extends BaseFragment implements NewsTypeListView,View.
     String url="http://v.juhe.cn/toutiao/index";
     String key="8fdf66756a83d0ffc3c42f3ebe8c0c7d";
 
+    private MyProgressDialog mDialog;
+
     @Override
     public View initView() {
         View view=View.inflate(mContext,R.layout.news_fragment,null);
         ButterKnife.bind(this,view);
+        mDialog=new MyProgressDialog(getActivity(),"正在加载中...");
+        mDialog.show();
         mNewsTypeListPressenter=new NewsTypeListPressenterImp(this);
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,android.R.color.holo_green_light,android.R.color.holo_red_light);
@@ -65,6 +70,9 @@ public class NewsFragment extends BaseFragment implements NewsTypeListView,View.
         Gson gson=new Gson();
         News news= gson.fromJson(result,News.class);
         final List<News.ResultBean.DataBean> dataBeanList=news.getResult().getData();
+        if (dataBeanList!=null&&dataBeanList.size()>0){
+            mDialog.dismiss();
+        }
         mNewsTypeAdapter=new NewsTypeAdapter(mContext,dataBeanList);
         RecyclerView.LayoutManager manager=new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(manager);

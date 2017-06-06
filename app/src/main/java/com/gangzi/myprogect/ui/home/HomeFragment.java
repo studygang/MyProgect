@@ -25,6 +25,7 @@ import com.gangzi.myprogect.ui.home.presenter.HomeNewsPresenter;
 import com.gangzi.myprogect.ui.home.presenter.imp.HomeNewsPresenterImp;
 import com.gangzi.myprogect.ui.home.view.HomeNewsView;
 import com.gangzi.myprogect.ui.news.view.imp.NewsDetailActivity;
+import com.gangzi.myprogect.utils.MyProgressDialog;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -54,6 +55,7 @@ public class HomeFragment extends BaseFragment implements HomeNewsView,View.OnCl
     //private HomeAdapter mHomeAdapter;
     private HomeAdapter2 mHomeAdapter;
     DrawerLayout drawerLayout;
+    private MyProgressDialog mDialog;
 
 
     @Override
@@ -69,6 +71,8 @@ public class HomeFragment extends BaseFragment implements HomeNewsView,View.OnCl
     public View initView() {
         View view= LayoutInflater.from(mContext).inflate(R.layout.fragment_home,null);
         ButterKnife.bind(this,view);
+        mDialog=new MyProgressDialog(getActivity(),"正在加载中...");
+        mDialog.show();
         mToolbar= (Toolbar) view.findViewById(R.id.toolBar);
         mFloatingActionButton.setOnClickListener(this);
         setToolBar();
@@ -115,13 +119,16 @@ public class HomeFragment extends BaseFragment implements HomeNewsView,View.OnCl
 
     @Override
     public void returnNews(String result) {
+       // mDialog.dismiss();
         System.out.println("result=="+result);
         Gson gson=new Gson();
        News news= gson.fromJson(result,News.class);
         final List<News.ResultBean.DataBean> dataBeanList=news.getResult().getData();
        // List<News.ResultBean.DataBean>dataBeanList=resultBean.getData();
        System.out.println("---dataBeanList----------"+dataBeanList.size());
-
+        if (dataBeanList!=null&&dataBeanList.size()>0){
+            mDialog.dismiss();
+        }
 
         mHomeAdapter=new HomeAdapter2(mContext,dataBeanList);
         LinearLayoutManager manager=new LinearLayoutManager(mContext);
