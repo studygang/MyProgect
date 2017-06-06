@@ -106,4 +106,5 @@ dependencies {
     compile 'com.android.support:percent:25.3.1'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.allenliu.versionchecklib:library:1.0.4'
 }

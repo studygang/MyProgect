@@ -24,6 +24,11 @@
         <activity android:name=".MainActivity">
         </activity>
 
+        <service android:name=".service.UpdateAppService"
+                 android:enabled="true"
+                 android:exported="true">
+        </service>
+
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="${UMENG_CHANNEL_VALUE}">

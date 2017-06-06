@@ -1,5 +1,7 @@
 package com.gangzi.myprogect;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.support.annotation.IdRes;
@@ -8,11 +10,16 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.allenliu.versionchecklib.AVersionService;
+import com.allenliu.versionchecklib.HttpRequestMethod;
+import com.allenliu.versionchecklib.VersionParams;
 import com.gangzi.myprogect.base.BaseFragment;
+import com.gangzi.myprogect.service.UpdateAppService;
 import com.gangzi.myprogect.ui.cart.CartFragment;
 import com.gangzi.myprogect.ui.home.HomeFragment;
 import com.gangzi.myprogect.ui.type.view.imp.TypeFragment;
@@ -49,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initFragment();
         initListener();
+        checkUpdateApp();
     }
 
     private void initFragment() {
@@ -154,5 +162,47 @@ public class MainActivity extends AppCompatActivity {
             this.finish();
             System.exit(0);
         }
+    }
+
+    private void checkUpdateApp() {
+        VersionParams versionParams=new VersionParams();
+        versionParams.setRequestUrl("http://www.baidu.com");
+        versionParams.setRequestMethod(HttpRequestMethod.GET);
+        Intent intent=new Intent(this, UpdateAppService.class);
+        intent.putExtra(AVersionService.VERSION_PARAMS_KEY,versionParams);
+        intent.putExtra("versionCode",getVerCode(this));
+        startService(intent);
+    }
+
+    /**
+     * 获取软件版本号
+     * @param context
+     * @return
+     */
+    public static int getVerCode(Context context) {
+        int verCode = -1;
+        try {
+            //注意："com.example.try_downloadfile_progress"对应AndroidManifest.xml里的package="……"部分
+            verCode = context.getPackageManager().getPackageInfo(
+                    "com.gangzi.myprogect", 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("msg",e.getMessage());
+        }
+        return verCode;
+    }
+    /**
+     * 获取版本名称
+     * @param context
+     * @return
+     */
+    public static String getVerName(Context context) {
+        String verName = "";
+        try {
+            verName = context.getPackageManager().getPackageInfo(
+                    "com.gangzi.myprogect", 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("msg",e.getMessage());
+        }
+        return verName;
     }
 }
