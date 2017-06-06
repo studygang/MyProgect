@@ -5,6 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.gangzi.myprogect.R;
 import com.gangzi.myprogect.adapter.NewsTypeAdapter;
@@ -96,6 +97,7 @@ public class NewsFragment extends BaseFragment implements NewsTypeListView,View.
     public void onRefresh() {
         initData();
         mRefreshLayout.setRefreshing(false);
+        Toast.makeText(getActivity(),"已经是最新新闻了",Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.gangzi.myprogect.R;
 import com.gangzi.myprogect.adapter.NewsTypeAdapter;
@@ -146,5 +147,6 @@ public class TypeFragment extends BaseFragment implements NewsTypeView,SwipeRefr
     public void onRefresh() {
         initData();
         mRefreshLayout.setRefreshing(false);
+        Toast.makeText(getActivity(),"已经是最新新闻了",Toast.LENGTH_SHORT).show();
     }
 }

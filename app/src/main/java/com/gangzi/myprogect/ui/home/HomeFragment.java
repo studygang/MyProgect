@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import com.gangzi.myprogect.MainActivity;
 import com.gangzi.myprogect.R;
@@ -156,5 +157,6 @@ public class HomeFragment extends BaseFragment implements HomeNewsView,View.OnCl
     public void onRefresh() {
         initData();
         mRefreshLayout.setRefreshing(false);
+        Toast.makeText(getActivity(),"已经是最新新闻了",Toast.LENGTH_SHORT).show();
     }
 }
