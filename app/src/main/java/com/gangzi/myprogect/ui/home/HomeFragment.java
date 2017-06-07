@@ -56,6 +56,7 @@ public class HomeFragment extends BaseFragment implements HomeNewsView,View.OnCl
     private HomeAdapter2 mHomeAdapter;
     DrawerLayout drawerLayout;
     private MyProgressDialog mDialog;
+    private String baseUrl="http://v.juhe.cn/";
 
 
     @Override
@@ -85,7 +86,7 @@ public class HomeFragment extends BaseFragment implements HomeNewsView,View.OnCl
     @Override
     public void initData() {
         super.initData();
-        mHomeNewsPresenter.RequestNews(url,key);
+        mHomeNewsPresenter.RequestNews(baseUrl,key);
     }
 
     /**
