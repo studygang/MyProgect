@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 25
@@ -90,6 +92,7 @@ dependencies {
     //RxJava2 Adapter
     //RxJava2
     //okhttputils
+    // sdk15, sdk19, sdk21, sdk23 are also available
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
     compile 'com.android.support:design:25.3.1'
@@ -109,7 +112,10 @@ dependencies {
     compile 'com.zhy:okhttputils:2.6.2'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:percent:25.3.1'
+    compile 'com.allenliu.versionchecklib:library:1.0.4'
+    compile 'org.jetbrains.kotlin:kotlin-stdlib:1.1.2'
+    compile 'org.jetbrains.anko:anko-sdk25:0.10.0-beta-1'
+    compile 'org.jetbrains.anko:anko-appcompat-v7:0.10.0-beta-1'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
-    compile 'com.allenliu.versionchecklib:library:1.0.4'
 }

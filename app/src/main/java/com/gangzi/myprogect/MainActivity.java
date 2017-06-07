@@ -5,14 +5,22 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allenliu.versionchecklib.AVersionService;
@@ -22,6 +30,7 @@ import com.gangzi.myprogect.base.BaseFragment;
 import com.gangzi.myprogect.service.UpdateAppService;
 import com.gangzi.myprogect.ui.cart.CartFragment;
 import com.gangzi.myprogect.ui.home.HomeFragment;
+import com.gangzi.myprogect.ui.login.view.imp.LoginActivity;
 import com.gangzi.myprogect.ui.type.view.imp.TypeFragment;
 import com.gangzi.myprogect.ui.user.UserFragment;
 
@@ -32,7 +41,7 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     @BindView(R.id.main_layout)
     FrameLayout main_layout;
@@ -40,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout mDrawerLayout;
     @BindView(R.id.rg_main)
     RadioGroup rg_main;
+    @BindView(R.id.navigation)
+    NavigationView mNavigationView;
+    private ImageView icon_image;
 
     private ArrayList<BaseFragment>fragmentList;
     private BaseFragment mFragment;
@@ -56,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initFragment();
         initListener();
+        initNavigationView();
         checkUpdateApp();
     }
 
@@ -163,6 +176,34 @@ public class MainActivity extends AppCompatActivity {
             System.exit(0);
         }
     }
+    //NavigationView初始化
+    private void initNavigationView() {
+        mNavigationView.setItemIconTintList(null);
+        View headView= mNavigationView.getHeaderView(0);
+        icon_image = (ImageView) headView.findViewById(R.id.icon_image);
+        mNavigationView.setNavigationItemSelectedListener(this);
+        setHomeItemState();
+        login();
+    }
+
+    private void login() {
+        icon_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
+    }
+
+    private void setHomeItemState() {
+       Menu menu= mNavigationView.getMenu();
+        MenuItem item=menu.getItem(0);
+        //更多中  特殊情况  取消选中状态
+       // menu.getItem(5).getSubMenu().getItem(0).setChecked(false);
+       // menu.getItem(5).getSubMenu().getItem(1).setChecked(false);
+        item.setChecked(true);
+    }
 
     private void checkUpdateApp() {
         VersionParams versionParams=new VersionParams();
@@ -204,5 +245,25 @@ public class MainActivity extends AppCompatActivity {
             Log.e("msg",e.getMessage());
         }
         return verName;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int itemId=item.getItemId();
+        switch (itemId){
+            case R.id.bt_home:
+                break;
+            case R.id.bt_type:
+                startActivity(new Intent(this,TypeFragment.class));
+                break;
+            case R.id.bt_cart:
+                startActivity(new Intent(this,CartFragment.class));
+                break;
+            case R.id.bt_me:
+                break;
+        }
+        item.setChecked(true);
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
