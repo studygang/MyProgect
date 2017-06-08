@@ -252,16 +252,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int itemId=item.getItemId();
         switch (itemId){
             case R.id.bt_home:
+                position=0;
+                rg_main.check(R.id.rb_home);
                 break;
             case R.id.bt_type:
-                startActivity(new Intent(this,TypeFragment.class));
+                //startActivity(new Intent(this,TypeFragment.class));
+                position=1;
+                rg_main.check(R.id.rb_type);
                 break;
             case R.id.bt_cart:
-                startActivity(new Intent(this,CartFragment.class));
+                //startActivity(new Intent(this,CartFragment.class));
+                position=2;
+                rg_main.check(R.id.rb_cart);
                 break;
             case R.id.bt_me:
+                position=3;
+                rg_main.check(R.id.rb_me);
                 break;
         }
+        BaseFragment fragment=getFragment(position);
+        switchFragment(mFragment,fragment);
         item.setChecked(true);
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;

@@ -66,6 +66,7 @@ public class TypeFragment extends BaseFragment implements NewsTypeView,SwipeRefr
         ButterKnife.bind(this,view);
         mDialog=new MyProgressDialog(getActivity(),"正在加载中...");
         mDialog.show();
+        mDialog.setCanceledOnTouchOutside(false);
         mPresenter=new NewsTypePresenterImp(this);
         setToolBar();
         mRefreshLayout.setOnRefreshListener(this);

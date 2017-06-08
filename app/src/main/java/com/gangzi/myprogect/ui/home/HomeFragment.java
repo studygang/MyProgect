@@ -74,6 +74,7 @@ public class HomeFragment extends BaseFragment implements HomeNewsView,View.OnCl
         ButterKnife.bind(this,view);
         mDialog=new MyProgressDialog(getActivity(),"正在加载中...");
         mDialog.show();
+        mDialog.setCanceledOnTouchOutside(false);
         mToolbar= (Toolbar) view.findViewById(R.id.toolBar);
         mFloatingActionButton.setOnClickListener(this);
         setToolBar();
