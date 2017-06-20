@@ -27,6 +27,7 @@ import com.allenliu.versionchecklib.AVersionService;
 import com.allenliu.versionchecklib.HttpRequestMethod;
 import com.allenliu.versionchecklib.VersionParams;
 import com.gangzi.myprogect.base.BaseFragment;
+import com.gangzi.myprogect.service.UpdateAppManager;
 import com.gangzi.myprogect.service.UpdateAppService;
 import com.gangzi.myprogect.ui.cart.CartFragment;
 import com.gangzi.myprogect.ui.home.HomeFragment;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private UserFragment mUserFragment;
     private int position;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +71,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initFragment();
         initListener();
         initNavigationView();
-        checkUpdateApp();
+        new UpdateAppManager(this).checkUpdate();
+        //checkUpdateApp();
     }
 
     private void initFragment() {
