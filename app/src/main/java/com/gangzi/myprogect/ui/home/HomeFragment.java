@@ -8,7 +8,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +27,7 @@ import com.gangzi.myprogect.ui.news.view.imp.NewsDetailActivity;
 import com.gangzi.myprogect.utils.MyProgressDialog;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,6 +58,11 @@ public class HomeFragment extends BaseFragment implements HomeNewsView,View.OnCl
     private MyProgressDialog mDialog;
     private String baseUrl="http://v.juhe.cn/";
 
+    private List<News.ResultBean.DataBean>dataBeanList=new ArrayList<>();
+
+    //测试加载更多的数据
+    boolean isLoading;
+
 
     @Override
     public void onAttach(Context context) {
@@ -81,6 +86,12 @@ public class HomeFragment extends BaseFragment implements HomeNewsView,View.OnCl
         mHomeNewsPresenter=new HomeNewsPresenterImp(this);
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,android.R.color.holo_green_light,android.R.color.holo_red_light);
+        mRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshLayout.setRefreshing(true);
+            }
+        });
         return view;
     }
 
@@ -125,7 +136,7 @@ public class HomeFragment extends BaseFragment implements HomeNewsView,View.OnCl
         System.out.println("result=="+result);
         Gson gson=new Gson();
        News news= gson.fromJson(result,News.class);
-        final List<News.ResultBean.DataBean> dataBeanList=news.getResult().getData();
+       dataBeanList=news.getResult().getData();
        // List<News.ResultBean.DataBean>dataBeanList=resultBean.getData();
        System.out.println("---dataBeanList----------"+dataBeanList.size());
         if (dataBeanList!=null&&dataBeanList.size()>0){
@@ -167,5 +178,11 @@ public class HomeFragment extends BaseFragment implements HomeNewsView,View.OnCl
         initData();
         mRefreshLayout.setRefreshing(false);
         Toast.makeText(getActivity(),"已经是最新新闻了",Toast.LENGTH_SHORT).show();
+    }
+    //测试加载更多的数据
+    private void getData(){
+        for (int i=0;i<3;i++){
+           //moreListData.add(x)
+        }
     }
 }
