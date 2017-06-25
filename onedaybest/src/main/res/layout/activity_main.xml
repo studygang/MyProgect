@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <android.support.design.widget.AppBarLayout
+            style="@style/Theme.AppCompat.Light"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <android.support.v7.widget.Toolbar
@@ -19,7 +20,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 android:background="@color/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay">
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:layout_scrollFlags="scroll|enterAlways">
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
         <android.support.v4.widget.SwipeRefreshLayout

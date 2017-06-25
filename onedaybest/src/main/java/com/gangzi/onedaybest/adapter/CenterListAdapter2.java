@@ -24,9 +24,9 @@ public class CenterListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<WeChatData.ResultBean.ListBean> dataList;
     private final LayoutInflater mLayoutInflater;
 
-    public static final int TYPE_MORE=0;
-    public static final int TYPE_LIST=1;
-    public static final int TYPE_BOTTOM=2;
+    private static final int TYPE_MORE=0;
+    private static final int TYPE_LIST=1;
+    private static final int TYPE_BOTTOM=2;
 
     public CenterListAdapter2(Context mContext, List<WeChatData.ResultBean.ListBean> dataList) {
         this.mContext=mContext;
@@ -59,7 +59,7 @@ public class CenterListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof NewsViewHolder){
+       if (holder instanceof NewsViewHolder){
             setNews((NewsViewHolder)holder,position);
         }
 
@@ -79,6 +79,7 @@ public class CenterListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public int getItemCount() {
         return dataList.size()+2;
+        //return 1;
     }
     class MoreViewHolder extends RecyclerView.ViewHolder {
 

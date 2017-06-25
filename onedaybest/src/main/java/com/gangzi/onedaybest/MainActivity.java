@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.gangzi.onedaybest.adapter.CenterListAdapter2;
+import com.gangzi.onedaybest.adapter.MainAdapter;
 import com.gangzi.onedaybest.bean.WeChatData;
 import com.gangzi.onedaybest.pressenter.WeChatPressenter;
 import com.gangzi.onedaybest.pressenter.imp.WeChatPresenterImp;
@@ -69,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements WeChatView{
         List<WeChatData.ResultBean.ListBean> data=weChatData.getResult().getList();
         LinearLayoutManager manager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         mRecyclerView.setLayoutManager(manager);
-       // MainAdapter adapter=new MainAdapter(this,data);
-        CenterListAdapter2 adapter=new CenterListAdapter2(this,data);
+        MainAdapter adapter=new MainAdapter(this,data);
+        //CenterListAdapter2 adapter=new CenterListAdapter2(this,data);
         mRecyclerView.setAdapter(adapter);
     }
 }
