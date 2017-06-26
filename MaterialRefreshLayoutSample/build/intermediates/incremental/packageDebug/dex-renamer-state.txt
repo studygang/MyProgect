@@ -1,0 +1,7 @@
+#Mon Jun 26 11:29:44 CST 2017
+base.0=E\:\\workspace\\MyProgect\\MaterialRefreshLayoutSample\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_1b14ab2f783922f901ef0cc41cd43d8520e3a96b
+renamed.1=classes2.dex
+renamed.0=classes.dex
+file.1=E\:\\workspace\\MyProgect\\MaterialRefreshLayoutSample\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_5faf71cb93f3a51c4e16f3dcca7e2687040e8f14\\classes.dex
+base.1=E\:\\workspace\\MyProgect\\MaterialRefreshLayoutSample\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_5faf71cb93f3a51c4e16f3dcca7e2687040e8f14
+file.0=E\:\\workspace\\MyProgect\\MaterialRefreshLayoutSample\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_1b14ab2f783922f901ef0cc41cd43d8520e3a96b\\classes.dex
