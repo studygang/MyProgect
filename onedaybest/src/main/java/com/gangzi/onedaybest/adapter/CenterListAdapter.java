@@ -32,7 +32,7 @@ public class CenterListAdapter extends RecyclerView.Adapter<CenterListAdapter.Vi
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-       return new ViewHolder((mInflater.inflate(R.layout.item_center_list,null)),mContext);
+       return new ViewHolder((mInflater.inflate(R.layout.item_center_list,parent,false)),mContext);
     }
 
     @Override
@@ -49,6 +49,12 @@ public class CenterListAdapter extends RecyclerView.Adapter<CenterListAdapter.Vi
     @Override
     public int getItemCount() {
         return dataListcenter.size();
+    }
+
+    public void cleanData(List<WeChatData.ResultBean.ListBean> datas) {
+        dataListcenter.clear();
+        dataListcenter.addAll(0,datas);
+        notifyItemRangeChanged(0,dataListcenter.size());
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

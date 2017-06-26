@@ -8,7 +8,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/MaterialRefreshLayoutSample" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/materialRefreshLayout_library" />
             <option value="$PROJECT_DIR$/onedaybest" />
           </set>
         </option>

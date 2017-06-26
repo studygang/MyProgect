@@ -81,6 +81,14 @@ public class CenterListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHo
         return dataList.size()+2;
         //return 1;
     }
+
+    public void cleanData(List<WeChatData.ResultBean.ListBean> data) {
+        dataList.clear();
+        dataList.addAll(data);
+        //notifyDataSetChanged();
+        notifyItemRangeChanged(0,dataList.size());
+    }
+
     class MoreViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tv_more;

@@ -21,6 +21,8 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
     private LayoutInflater mInflater;
 
+    private CenterListAdapter centerAdapter;
+
     private List<WeChatData.ResultBean.ListBean> dataList;
 
     public static final int MORE=0;
@@ -33,6 +35,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.mContext=context;
         this.dataList=data;
         mInflater=LayoutInflater.from(mContext);
+        centerAdapter=new CenterListAdapter(mContext,dataList);
     }
 
     @Override
@@ -83,6 +86,18 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return 3;
     }
 
+    public void cleanData(List<WeChatData.ResultBean.ListBean> data) {
+        //CenterListAdapter centerAdapter=new CenterListAdapter(mContext,dataList);
+        if (centerAdapter!=null){
+            centerAdapter.cleanData(data);
+        }
+       // centerAdapter=new CenterListAdapter(mContext,dataList);
+       /* dataList.clear();
+        dataList.addAll(data);
+        notifyItemRangeChanged(0,dataList.size());*/
+    }
+
+
     class MoreViewHolder extends RecyclerView.ViewHolder{
 
         private Context mContext;
@@ -106,7 +121,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void setData() {
             LinearLayoutManager mamager=new LinearLayoutManager(mContext);
             recycle.setLayoutManager(mamager);
-            CenterListAdapter centerAdapter=new CenterListAdapter(mContext,dataList);
+            centerAdapter=new CenterListAdapter(mContext,dataList);
             recycle.setAdapter(centerAdapter);
         }
     }

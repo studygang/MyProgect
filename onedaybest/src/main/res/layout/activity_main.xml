@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.gangzi.onedaybest.MainActivity">
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
+
         <android.support.design.widget.AppBarLayout
             style="@style/Theme.AppCompat.Light"
             android:layout_width="match_parent"
@@ -24,21 +21,33 @@
                 app:layout_scrollFlags="scroll|enterAlways">
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
-        <android.support.v4.widget.SwipeRefreshLayout
+
+    <com.cjj.MaterialRefreshLayout
             android:id="@+id/swip_refresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:overlay="true"
+            app:isLoadMore="true"
+            app:progress_size_type="normal"
+            app:wave_color="#90ffffff"
+            app:wave_show="true"
+            app:progress_colors="@array/material_colors"
+            app:wave_height_type="normal"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                >
             </android.support.v7.widget.RecyclerView>
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </com.cjj.MaterialRefreshLayout>
     </android.support.design.widget.CoordinatorLayout>
-    <android.support.design.widget.NavigationView
+
+   <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
         app:menu="@menu/menu"
         app:headerLayout="@layout/head_layout">
 

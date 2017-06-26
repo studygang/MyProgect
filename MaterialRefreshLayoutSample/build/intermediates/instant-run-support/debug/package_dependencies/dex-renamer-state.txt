@@ -1,0 +1,19 @@
+#Mon Jun 26 11:29:44 CST 2017
+renamed.5=classes3.dex
+renamed.4=classes.dex
+renamed.3=classes2.dex
+renamed.2=classes4.dex
+renamed.1=classes6.dex
+renamed.0=classes5.dex
+base.5=E\:\\workspace\\MyProgect\\MaterialRefreshLayoutSample\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_d3af9ff212ef2c60d44d313e43820ced91504b74
+base.4=E\:\\workspace\\MyProgect\\MaterialRefreshLayoutSample\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_28df6f38d9fd971fb347dd06db0c0e3d46fa8402
+base.3=E\:\\workspace\\MyProgect\\MaterialRefreshLayoutSample\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_29becf44a32c09ff7f1b3e562722e0293a1ab85c
+base.2=E\:\\workspace\\MyProgect\\MaterialRefreshLayoutSample\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_d6c13a52da249343593ca85b07ae7116aa0c5f16
+base.1=E\:\\workspace\\MyProgect\\MaterialRefreshLayoutSample\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\support-annotations-23.1.1_7c3d3f95d8ab53d18f101dcf68ec97190430e6fc
+base.0=E\:\\workspace\\MyProgect\\MaterialRefreshLayoutSample\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\internal_impl-23.1.1_3122deaca7d87dc6b9c9d94b4f876ad2e994ce48
+file.5=E\:\\workspace\\MyProgect\\MaterialRefreshLayoutSample\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_d3af9ff212ef2c60d44d313e43820ced91504b74\\classes.dex
+file.4=E\:\\workspace\\MyProgect\\MaterialRefreshLayoutSample\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_28df6f38d9fd971fb347dd06db0c0e3d46fa8402\\classes.dex
+file.3=E\:\\workspace\\MyProgect\\MaterialRefreshLayoutSample\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_29becf44a32c09ff7f1b3e562722e0293a1ab85c\\classes.dex
+file.2=E\:\\workspace\\MyProgect\\MaterialRefreshLayoutSample\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_d6c13a52da249343593ca85b07ae7116aa0c5f16\\classes.dex
+file.1=E\:\\workspace\\MyProgect\\MaterialRefreshLayoutSample\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\support-annotations-23.1.1_7c3d3f95d8ab53d18f101dcf68ec97190430e6fc\\classes.dex
+file.0=E\:\\workspace\\MyProgect\\MaterialRefreshLayoutSample\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\internal_impl-23.1.1_3122deaca7d87dc6b9c9d94b4f876ad2e994ce48\\classes.dex
