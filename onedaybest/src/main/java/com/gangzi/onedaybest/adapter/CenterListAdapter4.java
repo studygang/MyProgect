@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -19,7 +20,7 @@ import java.util.List;
  * Created by gangzi on 2017/6/23.
  */
 
-public class CenterListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class CenterListAdapter4 extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private Context mContext;
     private List<WeChatData.ResultBean.ListBean> dataList;
@@ -31,9 +32,9 @@ public class CenterListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private boolean isShowFootView;
 
-    public CenterListAdapter2(Context mContext, List<WeChatData.ResultBean.ListBean> listData) {
+    public CenterListAdapter4(Context mContext, List<WeChatData.ResultBean.ListBean> dataList) {
         this.mContext=mContext;
-        this.dataList=listData;
+        this.dataList=dataList;
         mLayoutInflater = LayoutInflater.from(mContext);
     }
 
@@ -103,18 +104,15 @@ public class CenterListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public void setLoadMoreData(List<WeChatData.ResultBean.ListBean> data) {
-       int size=dataList.size();
-        dataList.addAll(size,data);
-        notifyItemRangeChanged(size, dataList.size());
-        //dataList.addAll(data);
-        //notifyDataSetChanged();
-        //notifyItemInserted(size);
+        int size=dataList.size();
+        dataList.addAll(data);
+        notifyItemInserted(size);
     }
 
     public void setNewData(List<WeChatData.ResultBean.ListBean> data) {
-        dataList.clear();
+        //dataList.clear();
         dataList.addAll(data);
-        //notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     public void setBottomView(boolean b) {
@@ -123,10 +121,6 @@ public class CenterListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHo
         }else{
             isShowFootView=false;
         }
-    }
-
-    public void addData(List<WeChatData.ResultBean.ListBean> data) {
-      addData(0,data);
     }
 
 
@@ -153,14 +147,18 @@ public class CenterListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHo
     class BottomViweHolder extends RecyclerView.ViewHolder{
 
         private FrameLayout bottom;
+        private LinearLayout bottom_loading;
 
         public BottomViweHolder(View itemView) {
             super(itemView);
             bottom= (FrameLayout) itemView.findViewById(R.id.tv_bottom);
+            bottom_loading= (LinearLayout) itemView.findViewById(R.id.bottom_loading);
             if (isShowFootView){
                 bottom.setVisibility(View.VISIBLE);
+                bottom_loading.setVisibility(View.GONE);
             }else{
                 bottom.setVisibility(View.GONE);
+                bottom_loading.setVisibility(View.VISIBLE);
             }
         }
     }
