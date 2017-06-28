@@ -1,6 +1,14 @@
 package com.gangzi.onedaybest;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +19,7 @@ import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 import com.gangzi.onedaybest.adapter.CenterListAdapter2;
 import com.gangzi.onedaybest.bean.WeChatData;
+import com.gangzi.onedaybest.message.Message;
 import com.gangzi.onedaybest.pressenter.WeChatPressenter;
 import com.gangzi.onedaybest.pressenter.imp.WeChatPresenterImp;
 import com.gangzi.onedaybest.ui.WeChatView;
@@ -20,7 +29,18 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
+import de.greenrobot.event.ThreadMode;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
+import permissions.dispatcher.RuntimePermissions;
 
+//这是必须使用的注解，用于标注在你想要申请权限的Activity或者Fragment上，如demo里面的PermissionsDispatcherActivity：
+@RuntimePermissions
 public class MainActivity extends AppCompatActivity implements WeChatView{
 
     @BindView(R.id.toobal)
@@ -62,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements WeChatView{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        EventBus.getDefault().register(this);
         mProgressDialog=new MyProgressDialog(this,"正在加载中...");
         mWeChatPressenter=new WeChatPresenterImp(this);
         initData();
@@ -254,11 +275,13 @@ public class MainActivity extends AppCompatActivity implements WeChatView{
                 adapter.addData(data);
               //  mRecyclerView.scrollToPosition(0);
                 mRefreshLayout.finishRefresh();
+                adapter.setBottomView(false);
                // mRecyclerView.refreshComlete();
                 break;
             case LOADING:
                 adapter.addData(adapter.getcountData(), data);
               //  mRecyclerView.scrollToPosition(adapter.getcountData());
+                //adapter.notifyDataSetChanged();
                 mRefreshLayout.finishRefreshLoadMore();
                // mRecyclerView.refreshComlete();
                if (pno<=totalPager){
@@ -268,6 +291,74 @@ public class MainActivity extends AppCompatActivity implements WeChatView{
                 }
                 break;
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MainThread)
+    public void requestCameraPermission(Message message){
+        String code=message.code;
+        System.out.println("消息code-------------"+code);
+        if (code.equals("openCamer")){
+            requestPermission();
+        }
+    }
+    @TargetApi(Build.VERSION_CODES.M)
+    private void requestPermission() {
+        MainActivityPermissionsDispatcher.openCameraWithCheck(this);
+    }
+    //这也是必须使用的注解，用于标注在你要获取权限的方法，注解括号里面有参数，传入想要申请的权限。
+    // 也就是说你获取了相应的权限之后就会执行这个方法：
+    @NeedsPermission(Manifest.permission.CAMERA)
+    public void openCamera(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);// 启动系统相机
+        startActivity(intent);
+    }
+    //这个不是必须的注解，用于标注申请权限前需要执行的方法，注解括号里面有参数，传入想要申请的权限，
+    // 而且这个方法还要传入一个PermissionRequest对象，这个对象有两种方法：proceed()让权限请求继续，
+    // cancel()让请求中断。也就是说，这个方法会拦截你发出的请求，
+    // 这个方法用于告诉用户你接下来申请的权限是干嘛的，说服用户给你权限。
+    @OnShowRationale(Manifest.permission.CAMERA)
+    public void showRationale(final PermissionRequest request){
+        new AlertDialog.Builder(this)
+                .setMessage("申请相机权限")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        request.proceed();//继续申请权限
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                request.cancel();
+            }
+        }).show();
+    }
+    //也不是必须的注解，用于标注如果权限请求失败，但是用户没有勾选不再询问的时候执行的方法，
+    // 注解括号里面有参数，传入想要申请的权限。也就是说，我们可以在这个方法做申请权限失败之后的处理，
+    // 如像用户解释为什么要申请，或者重新申请操作等。
+    @OnPermissionDenied(Manifest.permission.CAMERA)
+    public void permissionDenied(){
+        Toast.makeText(this, "已拒绝CAMERA权限", Toast.LENGTH_SHORT).show();
+    }
+    //也不是必须的注解，用于标注如果权限请求失败,而且用户勾选不再询问的时候执行的方法，
+    // 注解括号里面有参数，传入想要申请的权限。也就是说，
+    // 我们可以在这个方法做申请权限失败并选择不再询问之后的处理。
+    // 例如，可以告诉作者想开启权限的就从手机设置里面开启。
+    @OnNeverAskAgain(Manifest.permission.CAMERA)
+    public void neverAskAgain(){
+        Toast.makeText(this, "已拒绝CAMERA权限，并不再询问", Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        MainActivityPermissionsDispatcher.onRequestPermissionsResult(this,requestCode,grantResults);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
 }

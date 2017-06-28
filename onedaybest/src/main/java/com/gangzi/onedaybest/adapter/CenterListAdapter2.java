@@ -1,6 +1,8 @@
 package com.gangzi.onedaybest.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.gangzi.onedaybest.message.Message;
 import com.gangzi.onedaybest.R;
 import com.gangzi.onedaybest.bean.WeChatData;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by gangzi on 2017/6/23.
@@ -24,6 +30,7 @@ public class CenterListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHo
     private Context mContext;
     private List<WeChatData.ResultBean.ListBean> dataList;
     private final LayoutInflater mLayoutInflater;
+    private List<WeChatData.ResultBean.ListBean> tempDataList=new ArrayList<>();
 
     private static final int TYPE_MORE=0;
     private static final int TYPE_LIST=1;
@@ -64,8 +71,27 @@ public class CenterListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
        if (holder instanceof NewsViewHolder){
             setNews((NewsViewHolder)holder,position);
-        }
+        }else if (holder instanceof BottomViweHolder){
+           changeStatus((BottomViweHolder)holder,position);
+       }else if (holder instanceof MoreViewHolder){
+           more((MoreViewHolder)holder,position);
+       }
 
+    }
+
+    private void more(MoreViewHolder holder, int position) {
+        holder.tv_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().post(new Message("openCamer"));
+            }
+        });
+    }
+
+    public void openCamera(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//调用android自带的照相机
+        //photoUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+     //   startActivityForResult(intent, 1);
     }
 
     private void setNews(NewsViewHolder holder, final int position) {
@@ -77,6 +103,14 @@ public class CenterListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHo
         holder.tv_title.setText(title);
         holder.tv_author.setText(from);
         Glide.with(mContext).load(firstImageUrl).into(holder.iv_image);
+    }
+
+    private void changeStatus(BottomViweHolder holder, int position) {
+        if (isShowFootView){
+            holder.bottom.setVisibility(View.VISIBLE);
+        }else{
+            holder.bottom.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -93,6 +127,8 @@ public class CenterListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void addData(int position, List<WeChatData.ResultBean.ListBean> datas) {
         if (datas!=null&&datas.size()>0){
             dataList.addAll(position,datas);
+           // dataList=tempDataList;
+           // setBottomView(isShowFootView);
             notifyItemRangeChanged(position,dataList.size());
           //  notifyItemInserted(position);
         }
@@ -120,10 +156,10 @@ public class CenterListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void setBottomView(boolean b) {
         if (b){
             isShowFootView=true;
-            notifyDataSetChanged();
+           // notifyDataSetChanged();
         }else{
             isShowFootView=false;
-            notifyDataSetChanged();
+            //notifyDataSetChanged();
         }
     }
 
@@ -138,6 +174,7 @@ public class CenterListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         public MoreViewHolder(View itemView) {
             super(itemView);
+            tv_more= (TextView) itemView.findViewById(R.id.tv_more);
         }
     }
     class NewsViewHolder extends RecyclerView.ViewHolder{
@@ -159,11 +196,11 @@ public class CenterListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHo
         public BottomViweHolder(View itemView) {
             super(itemView);
             bottom= (FrameLayout) itemView.findViewById(R.id.tv_bottom);
-            if (isShowFootView){
+           /* if (isShowFootView){
                 bottom.setVisibility(View.VISIBLE);
             }else{
                 bottom.setVisibility(View.GONE);
-            }
+            }*/
         }
     }
 }
