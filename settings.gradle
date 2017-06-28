@@ -1,1 +1,1 @@
-include ':app', ':onedaybest', ':materialRefreshLayout_library', ':MaterialRefreshLayoutSample'
+include ':app', ':onedaybest', ':materialRefreshLayout_library', ':MaterialRefreshLayoutSample', ':MaterialRefreshLayout'

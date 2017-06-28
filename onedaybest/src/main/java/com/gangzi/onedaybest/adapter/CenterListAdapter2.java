@@ -120,8 +120,10 @@ public class CenterListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void setBottomView(boolean b) {
         if (b){
             isShowFootView=true;
+            notifyDataSetChanged();
         }else{
             isShowFootView=false;
+            notifyDataSetChanged();
         }
     }
 

@@ -21,6 +21,10 @@
                 app:layout_scrollFlags="scroll|enterAlways">
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
+       <!-- <me.shihao.library.XRecyclerView
+            android:id="@+id/recycle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>-->
 
    <com.cjj.MaterialRefreshLayout
             android:id="@+id/swip_refresh"

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/MaterialRefreshLayout/MaterialRefreshLayout.iml" filepath="$PROJECT_DIR$/MaterialRefreshLayout/MaterialRefreshLayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/MaterialRefreshLayoutSample/MaterialRefreshLayoutSample.iml" filepath="$PROJECT_DIR$/MaterialRefreshLayoutSample/MaterialRefreshLayoutSample.iml" />
       <module fileurl="file://$PROJECT_DIR$/MyProgect.iml" filepath="$PROJECT_DIR$/MyProgect.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />

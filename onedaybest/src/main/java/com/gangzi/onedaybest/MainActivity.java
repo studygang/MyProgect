@@ -85,12 +85,33 @@ public class MainActivity extends AppCompatActivity implements WeChatView{
             }
         });
         //mRefreshLayout.autoRefresh();
+        //mRefreshLayout.autoRefreshLoadMore();
        /* mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 status=REFRESH;
                 pno=1;
                 mWeChatPressenter.getWeChatData(pno,ps,key,dtype);
+            }
+        });*/
+       /* mRecyclerView.setOnRefreshListener(new XRecyclerView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //刷新
+                refreshData();
+            }
+
+            @Override
+            public void onLoadMore() {
+                //加载更多
+                if (pno<totalPager){
+                    loadData();
+                }else{
+                    //mRefreshLayout.setLoadMore(false);
+                    Toast.makeText(MainActivity.this,"已经到底部了", Toast.LENGTH_SHORT).show();
+                   // mRefreshLayout.finishRefreshLoadMore();
+                    mRecyclerView.refreshComlete();
+                }
             }
         });*/
     }
@@ -233,12 +254,14 @@ public class MainActivity extends AppCompatActivity implements WeChatView{
                 adapter.addData(data);
               //  mRecyclerView.scrollToPosition(0);
                 mRefreshLayout.finishRefresh();
+               // mRecyclerView.refreshComlete();
                 break;
             case LOADING:
                 adapter.addData(adapter.getcountData(), data);
               //  mRecyclerView.scrollToPosition(adapter.getcountData());
                 mRefreshLayout.finishRefreshLoadMore();
-                if (pno<=totalPager){
+               // mRecyclerView.refreshComlete();
+               if (pno<=totalPager){
                     adapter.setBottomView(true);
                 }else{
                     adapter.setBottomView(false);
