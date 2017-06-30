@@ -86,15 +86,31 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return 3;
     }
 
-    public void cleanData(List<WeChatData.ResultBean.ListBean> data) {
+    public void cleanData() {
         //CenterListAdapter centerAdapter=new CenterListAdapter(mContext,dataList);
         if (centerAdapter!=null){
-            centerAdapter.cleanData(data);
+            centerAdapter.cleanData();
         }
        // centerAdapter=new CenterListAdapter(mContext,dataList);
        /* dataList.clear();
         dataList.addAll(data);
         notifyItemRangeChanged(0,dataList.size());*/
+    }
+
+    public void addData(List<WeChatData.ResultBean.ListBean> data) {
+        if (centerAdapter!=null){
+            centerAdapter.addData(data);
+        }
+    }
+
+    public int getcountData() {
+        return centerAdapter.getcountData();
+    }
+
+    public void addData(int i, List<WeChatData.ResultBean.ListBean> data) {
+        if (centerAdapter!=null){
+            centerAdapter.addData(i,data);
+        }
     }
 
 

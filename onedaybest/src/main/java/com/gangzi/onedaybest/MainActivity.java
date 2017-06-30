@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements WeChatView{
 
     private MyProgressDialog mProgressDialog;
     private WeChatPressenter mWeChatPressenter;
-    //private MainAdapter adapter;
+   // private MainAdapter adapter;
     private CenterListAdapter2 adapter;
     //private TestAdapter adapter;
     //private CenterListAdapter4 mCenterListAdapter4;
@@ -266,6 +266,7 @@ public class MainActivity extends AppCompatActivity implements WeChatView{
         switch (status){
             case NORMAL:
                 adapter=new CenterListAdapter2(this,data);
+                //adapter=new MainAdapter(this,data);
                 mRecyclerView.setAdapter(adapter);
                 LinearLayoutManager manager=new LinearLayoutManager(this);
                 mRecyclerView.setLayoutManager(manager);
@@ -275,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements WeChatView{
                 adapter.addData(data);
               //  mRecyclerView.scrollToPosition(0);
                 mRefreshLayout.finishRefresh();
-                adapter.setBottomView(false);
+               // adapter.setBottomView(false);
                // mRecyclerView.refreshComlete();
                 break;
             case LOADING:
@@ -338,6 +339,7 @@ public class MainActivity extends AppCompatActivity implements WeChatView{
     @OnPermissionDenied(Manifest.permission.CAMERA)
     public void permissionDenied(){
         Toast.makeText(this, "已拒绝CAMERA权限", Toast.LENGTH_SHORT).show();
+        requestPermission();
     }
     //也不是必须的注解，用于标注如果权限请求失败,而且用户勾选不再询问的时候执行的方法，
     // 注解括号里面有参数，传入想要申请的权限。也就是说，

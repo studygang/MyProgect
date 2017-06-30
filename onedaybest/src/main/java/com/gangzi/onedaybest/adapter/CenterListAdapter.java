@@ -51,10 +51,24 @@ public class CenterListAdapter extends RecyclerView.Adapter<CenterListAdapter.Vi
         return dataListcenter.size();
     }
 
-    public void cleanData(List<WeChatData.ResultBean.ListBean> datas) {
+    public void cleanData() {
         dataListcenter.clear();
-        dataListcenter.addAll(0,datas);
         notifyItemRangeChanged(0,dataListcenter.size());
+    }
+
+    public void addData(List<WeChatData.ResultBean.ListBean> data) {
+        addData(0,data);
+    }
+
+    public void addData(int positon, List<WeChatData.ResultBean.ListBean> data) {
+        if (data!=null&&data.size()>0){
+            dataListcenter.addAll(positon,data);
+            notifyItemRangeChanged(positon,dataListcenter.size());
+        }
+    }
+
+    public int getcountData() {
+       return dataListcenter.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
