@@ -1,20 +1,25 @@
 package com.gangzi.myprogect.service;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gangzi.myprogect.BuildConfig;
 import com.gangzi.myprogect.R;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -27,8 +32,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * 应用自动更新
@@ -40,8 +50,10 @@ public class UpdateAppManager {
     private static final int DOWNLOADING = 1;
     private static final int DOWNLOAD_FINISH = 2;
 
+    private OkHttpClient mOkHttpClient;
+
     private ProgressBar mProgressBar;
-    private Dialog mDownLoadDialog;
+    private AlertDialog mDownLoadDialog;
     private Context mContext;
     private String savaPath;
     private int mProgerss;
@@ -56,6 +68,18 @@ public class UpdateAppManager {
 
     public UpdateAppManager(Context context) {
         mContext = context;
+        initOkHttpClient();
+    }
+
+    private void initOkHttpClient() {
+        //File sdcache = getExternalCacheDir();
+        //int cacheSize = 10 * 1024 * 1024;
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(20, TimeUnit.SECONDS)
+                .readTimeout(20, TimeUnit.SECONDS);
+                //.cache(new Cache(sdcache.getAbsoluteFile(), cacheSize));
+        mOkHttpClient = builder.build();
     }
 
     private Handler mGetVersionHandler=new Handler(){
@@ -153,14 +177,18 @@ public class UpdateAppManager {
         TextView tv_title= (TextView) dialogView.findViewById(R.id.tv_title);
         tv_title.setText("检测到新版本");
         TextView tv_content= (TextView) dialogView.findViewById(R.id.tv_context);
-        tv_content.setText("检测到新版本\n1.修复BUG\n2.优化界面\n3.欢迎大家下载");
+        tv_content.setText("1.修复BUG\n2.优化界面\n3.欢迎大家下载");
         TextView tv_update= (TextView) dialogView.findViewById(R.id.update);
         TextView tv_cancel= (TextView) dialogView.findViewById(R.id.cancle);
         updateDialog.setView(dialogView);
+        AlertDialog alertDialog=updateDialog.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
         tv_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialogView.setVisibility(View.GONE);
+                alertDialog.dismiss();
                 //显示下载对话框
                 showDownloadDialog();
             }
@@ -168,30 +196,35 @@ public class UpdateAppManager {
         tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                alertDialog.dismiss();
             }
         });
-        updateDialog.create().show();
     }
 
     private void showDownloadDialog() {
         AlertDialog.Builder downBuilder=new AlertDialog.Builder(mContext);
         View downView=LayoutInflater.from(mContext).inflate(R.layout.dialog_progress_down,null);
+        LinearLayout linearLayout= (LinearLayout) downView.findViewById(R.id.linears);
+        RelativeLayout relativeLayout= (RelativeLayout) downView.findViewById(R.id.relativeLayout1);
         mProgressBar= (ProgressBar) downView.findViewById(R.id.id_progress);
         TextView tv_title= (TextView) downView.findViewById(R.id.tv_title);
         tv_title.setText("正在下载中...");
         TextView tv_cancel= (TextView) downView.findViewById(R.id.cancle);
         downBuilder.setView(downView);
+        mDownLoadDialog=downBuilder.create();
+        mDownLoadDialog.setCanceledOnTouchOutside(false);
+        mDownLoadDialog.show();
         tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                relativeLayout.setVisibility(View.GONE);
                 downView.setVisibility(View.GONE);
+                linearLayout.setVisibility(View.GONE);
+                mDownLoadDialog.dismiss();
                 // 设置下载状态为取消
                 isCancel=true;
             }
         });
-        mDownLoadDialog=downBuilder.create();
-        mDownLoadDialog.show();
         // 下载文件
         downloadAPK();
     }
@@ -200,44 +233,92 @@ public class UpdateAppManager {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                    try {
-                        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                            String sdPath = Environment.getExternalStorageDirectory() + "/";
-                            savaPath = sdPath + "myproject";
-                            File file = new File(savaPath);
-                            if (!file.exists()) {
-                                file.mkdir();
-                            }
-                            //下载文件
-                            HttpURLConnection connection = (HttpURLConnection) new URL(mVersion_path).openConnection();
-                            connection.connect();
-                            InputStream is=connection.getInputStream();
-                            int length=connection.getContentLength();
-                            File apkFile=new File(savaPath,mVersion_name);
-                            FileOutputStream fos=new FileOutputStream(apkFile);
-                            int count=0;
-                            byte[] buffer=new byte[1024];
-                            while (!isCancel){
-                                int numRead=is.read(buffer);
-                                count+=numRead;
-                                mProgerss=(int) (((float)count/length)*100);
-                                // 更新进度条
-                                mUpdateProgressHandler.sendEmptyMessage(DOWNLOADING);
-                                // 下载完成
-                                if (numRead < 0){
-                                    mUpdateProgressHandler.sendEmptyMessage(DOWNLOAD_FINISH);
-                                    break;
-                                }
-                                fos.write(buffer, 0, numRead);
-                            }
-                            fos.close();
-                            is.close();
+                  if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                        String sdPath = Environment.getExternalStorageDirectory() + "/";
+                        savaPath = sdPath + "myproject";
+                        File file = new File(savaPath);
+                        if (!file.exists()) {
+                            file.mkdir();
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                        //  downloadFiles();
+                        downloadFile();
+                  }
             }
         }).start();
+    }
+
+    private void downloadFiles() throws IOException {
+        //下载文件
+        HttpURLConnection connection = (HttpURLConnection) new URL(mVersion_path).openConnection();
+        connection.connect();
+        InputStream is=connection.getInputStream();
+        int length=connection.getContentLength();
+        File apkFile=new File(savaPath,mVersion_name);
+        FileOutputStream fos=new FileOutputStream(apkFile);
+        int count=0;
+        byte[] buffer=new byte[1024];
+        while (!isCancel){
+            int numRead=is.read(buffer);
+            count+=numRead;
+            mProgerss=(int) (((float)count/length)*100);
+            // 更新进度条
+            mUpdateProgressHandler.sendEmptyMessage(DOWNLOADING);
+            // 下载完成
+            if (numRead < 0){
+                mUpdateProgressHandler.sendEmptyMessage(DOWNLOAD_FINISH);
+                break;
+            }
+            fos.write(buffer, 0, numRead);
+        }
+        fos.close();
+        is.close();
+    }
+
+    private void downloadFile() {
+        Request request = new Request.Builder().url(mVersion_path).build();
+        mOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) {
+                InputStream inputStream = response.body().byteStream();
+                int length= (int) response.body().contentLength();
+                FileOutputStream fileOutputStream = null;
+                try {
+                    File apkFile=new File(savaPath,mVersion_name);
+                    fileOutputStream = new FileOutputStream(apkFile);
+                    byte[] buffer = new byte[1024];
+                    int count = 0;
+                    while (!isCancel){
+                        int numRead=inputStream.read(buffer);
+                        count+=numRead;
+                        mProgerss=(int) (((float)count/length)*100);
+                        // 更新进度条
+                        mUpdateProgressHandler.sendEmptyMessage(DOWNLOADING);
+                        // 下载完成
+                        if (numRead < 0){
+                            mUpdateProgressHandler.sendEmptyMessage(DOWNLOAD_FINISH);
+                            break;
+                        }
+                        fileOutputStream.write(buffer, 0, numRead);
+                    }
+                   /* while ((len = inputStream.read(buffer)) != -1) {
+                        fileOutputStream.write(buffer, 0, len);
+                    }*/
+                    fileOutputStream.flush();
+                    inputStream.close();
+                    fileOutputStream.close();
+                } catch (IOException e) {
+                    Log.i("wangshu", "IOException");
+                    e.printStackTrace();
+                }
+
+                Log.d("wangshu", "文件下载成功");
+            }
+        });
     }
 
     /**
@@ -249,8 +330,18 @@ public class UpdateAppManager {
             return;
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri uri = Uri.parse("file://" + apkFile.toString());
-        intent.setDataAndType(uri, "application/vnd.android.package-archive");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri contentUri = FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".fileprovider", apkFile);
+            intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+        } else {
+            intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            //Uri uri = Uri.parse("file://" + apkFile.toString());
+            //intent.setDataAndType(uri, "application/vnd.android.package-archive");
+        }
+
         mContext.startActivity(intent);
     }
 }

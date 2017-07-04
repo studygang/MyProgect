@@ -86,12 +86,12 @@ public class HomeFragment extends BaseFragment implements HomeNewsView,View.OnCl
         mHomeNewsPresenter=new HomeNewsPresenterImp(this);
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,android.R.color.holo_green_light,android.R.color.holo_red_light);
-        mRefreshLayout.post(new Runnable() {
+      /*  mRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
                 mRefreshLayout.setRefreshing(true);
             }
-        });
+        });*/
         return view;
     }
 
