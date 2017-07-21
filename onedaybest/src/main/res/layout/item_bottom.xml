@@ -31,8 +31,8 @@
         android:gravity="center"
         android:visibility="gone">
         <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             style="?android:attr/progressBarStyleSmall"
             android:layout_gravity="center"
             />
@@ -40,7 +40,7 @@
             android:layout_marginLeft="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="17sp"
             android:textColor="#8C8C8C"
             android:layout_gravity="center"
             android:text="努力加载中..."/>

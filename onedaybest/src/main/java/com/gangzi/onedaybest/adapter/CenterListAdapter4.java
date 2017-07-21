@@ -13,7 +13,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.gangzi.onedaybest.R;
 import com.gangzi.onedaybest.bean.WeChatData;
+import com.gangzi.onedaybest.utils.GlideImageLoader;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,9 +30,13 @@ public class CenterListAdapter4 extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<WeChatData.ResultBean.ListBean> dataList;
     private final LayoutInflater mLayoutInflater;
 
-    private static final int TYPE_MORE=0;
-    private static final int TYPE_LIST=1;
-    private static final int TYPE_BOTTOM=2;
+    private static final int TYPE_BANNER=0;
+    private static final int TYPE_MORE=1;
+    private static final int TYPE_LIST=2;
+    private static final int TYPE_BOTTOM=3;
+
+    private boolean isLoadMore;
+
 
     private boolean isShowFootView;
 
@@ -41,8 +49,10 @@ public class CenterListAdapter4 extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public int getItemViewType(int position) {
         if (position==0){
+            return TYPE_BANNER;
+        }else if (position==1){
             return TYPE_MORE;
-        }else if (position==dataList.size()+1){
+        }else if (position==dataList.size()+2){
             return TYPE_BOTTOM;
         }else{
             return TYPE_LIST;
@@ -51,7 +61,9 @@ public class CenterListAdapter4 extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType==TYPE_MORE){
+        if (viewType==TYPE_BANNER){
+            return  new BannerViewHolder(mLayoutInflater.inflate(R.layout.item_banner,parent,false));
+        }else if (viewType==TYPE_MORE){
             return new MoreViewHolder(mLayoutInflater.inflate(R.layout.more_item,parent,false));
         }else if (viewType==TYPE_LIST){
             return new NewsViewHolder(mLayoutInflater.inflate(R.layout.item_center_list,parent,false));
@@ -63,14 +75,55 @@ public class CenterListAdapter4 extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-       if (holder instanceof NewsViewHolder){
+        if (holder instanceof BannerViewHolder){
+            setBanner((BannerViewHolder)holder,position);
+        } else if (holder instanceof NewsViewHolder){
             setNews((NewsViewHolder)holder,position);
+        }else if (holder instanceof BottomViweHolder){
+            changeStatus((BottomViweHolder)holder,position);
         }
 
     }
 
+    private void changeStatus(BottomViweHolder holder, int position) {
+       // if (isLoadMore)
+        if (isShowFootView){
+            holder.bottom.setVisibility(View.VISIBLE);
+            holder.bottom_loading.setVisibility(View.GONE);
+        }else{
+            holder.bottom.setVisibility(View.GONE);
+            holder.bottom_loading.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setBanner(BannerViewHolder holder, int position) {
+
+        List<String> images=new ArrayList<>();
+        images.add("http://zxpic.gtimg.com/infonew/0/wechat_pics_-214521.jpg/168");
+        images.add("http://zxpic.gtimg.com/infonew/0/wechat_pics_-214279.jpg/168");
+        images.add("http://zxpic.gtimg.com/infonew/0/wechat_pics_-214267.jpg/168");
+
+        holder.banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
+        //设置图片加载器
+        holder.banner.setImageLoader(new GlideImageLoader());
+        //设置图片集合
+        holder.banner.setImages(images);
+        //设置banner动画效果
+       // holder.banner.setBannerAnimation(Transformer.DepthPage);
+        //设置标题集合（当banner样式有显示title时）
+       // holder.banner.setBannerTitles(titles);
+        //设置自动轮播，默认为true
+        holder.banner.isAutoPlay(true);
+        //设置轮播时间
+        holder.banner.setDelayTime(5000);
+        //设置指示器位置（当banner模式中有指示器时）
+        holder.banner.setIndicatorGravity(BannerConfig.CENTER);
+        //banner设置方法全部调用完毕时最后调用
+        holder.banner.start();
+    }
+
     private void setNews(NewsViewHolder holder, final int position) {
-        WeChatData.ResultBean.ListBean data=dataList.get(position-1);
+        WeChatData.ResultBean.ListBean data=dataList.get(position-2);
         String from=data.getSource();
         String title=data.getTitle();
         String url=data.getUrl();
@@ -82,7 +135,7 @@ public class CenterListAdapter4 extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        return dataList.size()+2;
+        return dataList.size()+3;
         //return 1;
     }
 
@@ -117,9 +170,17 @@ public class CenterListAdapter4 extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public void setBottomView(boolean b) {
         if (b){
-            isShowFootView=true;
-        }else{
             isShowFootView=false;
+        }else{
+            isShowFootView=true;
+        }
+    }
+
+    public void setLoading(boolean b) {
+        if (b){
+            isLoadMore=true;
+        }else{
+            isLoadMore=false;
         }
     }
 
@@ -153,13 +214,15 @@ public class CenterListAdapter4 extends RecyclerView.Adapter<RecyclerView.ViewHo
             super(itemView);
             bottom= (FrameLayout) itemView.findViewById(R.id.tv_bottom);
             bottom_loading= (LinearLayout) itemView.findViewById(R.id.bottom_loading);
-            if (isShowFootView){
-                bottom.setVisibility(View.VISIBLE);
-                bottom_loading.setVisibility(View.GONE);
-            }else{
-                bottom.setVisibility(View.GONE);
-                bottom_loading.setVisibility(View.VISIBLE);
-            }
+        }
+    }
+    class BannerViewHolder extends RecyclerView.ViewHolder{
+
+        Banner banner;
+
+        public BannerViewHolder(View itemView) {
+            super(itemView);
+            banner= (Banner) itemView.findViewById(R.id.banner);
         }
     }
 }

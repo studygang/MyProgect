@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:overlay="true"
-            app:isLoadMore="true"
+            app:isLoadMore="false"
             app:progress_size_type="normal"
             app:wave_color="#90ffffff"
             app:wave_show="true"

@@ -1,6 +1,9 @@
 package com.gangzi.myprogect.service;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,6 +19,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +54,13 @@ public class UpdateAppManager {
     private static final int DOWNLOADING = 1;
     private static final int DOWNLOAD_FINISH = 2;
 
+    private static final int NOTIFY_ID = 0;
+    private NotificationManager mNotificationManager;
+    private Notification notification;
+
+    //通知显示内容
+    private PendingIntent pd;
+
     private OkHttpClient mOkHttpClient;
 
     private ProgressBar mProgressBar;
@@ -57,6 +68,8 @@ public class UpdateAppManager {
     private Context mContext;
     private String savaPath;
     private int mProgerss;
+
+    //private long mProgerss;
 
     private boolean isCancel;
     private static final String url="http://www.baidu.com/";
@@ -69,6 +82,10 @@ public class UpdateAppManager {
     public UpdateAppManager(Context context) {
         mContext = context;
         initOkHttpClient();
+        mNotificationManager = (NotificationManager) context.getSystemService(android.content.Context.NOTIFICATION_SERVICE);
+        Intent intent = new Intent(mContext,UpdateAppManager.class);
+        pd = PendingIntent.getActivity(mContext, 0, intent, 0);
+        //createNotification();
     }
 
     private void initOkHttpClient() {
@@ -108,11 +125,21 @@ public class UpdateAppManager {
             switch (msg.what){
                 case DOWNLOADING:
                     // 设置进度条
-                    mProgressBar.setProgress(mProgerss);
+                 // mProgressBar.setProgress(mProgerss);
+                    /*new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            RemoteViews contentview = notification.contentView;
+                            // contentview.setTextViewText(R.id.tv_progress_download,mProgerss + "%");
+                            contentview.setProgressBar(R.id.download_progress, 100, mProgerss, false);
+                            mNotificationManager.notify(NOTIFY_ID, notification);
+                        }
+                    }).start();*/
+
                     break;
                 case DOWNLOAD_FINISH:
                     // 隐藏当前下载对话框
-                    mDownLoadDialog.dismiss();
+                    //mDownLoadDialog.dismiss();
                     // 安装 APK 文件
                     installAPK();
                     break;
@@ -136,7 +163,7 @@ public class UpdateAppManager {
                 String versionCode="2";
                 String versionName="测试更新";
                 String versionDes="修复了一些已知的Bug";
-                String versionPath="http://123.125.110.15/imtt.dd.qq.com/16891/A2165D036E69E4271664B70FCA6446ED.apk?mkey=593653e882f06f80&f=1d58&c=0&fsname=com.tencent.qqgame_6.8.6_60625.apk&csr=1bbd&p=.apk";
+                String versionPath="http://imtt.dd.qq.com/16891/E1DC6ABF1B4FB804A99F90CE371D1E6D.apk?fsname=cn.zwonline.shangji_3.3.1_2017191622.apk&csr=1bbd&crazycache=1";
                 Map<String,String>map=new HashMap<String, String>();
                 map.put("versionCode",versionCode);
                 map.put("versionName",versionName);
@@ -190,7 +217,9 @@ public class UpdateAppManager {
                 dialogView.setVisibility(View.GONE);
                 alertDialog.dismiss();
                 //显示下载对话框
-                showDownloadDialog();
+                //showDownloadDialog();
+                createNotification();
+                downloadAPK();
             }
         });
         tv_cancel.setOnClickListener(new View.OnClickListener() {
@@ -295,15 +324,22 @@ public class UpdateAppManager {
                     while (!isCancel){
                         int numRead=inputStream.read(buffer);
                         count+=numRead;
-                        mProgerss=(int) (((float)count/length)*100);
+                       mProgerss=(int) (((float)count/length)*100);
+                        //mProgerss=((count/length)*100);
                         // 更新进度条
-                        mUpdateProgressHandler.sendEmptyMessage(DOWNLOADING);
+                        //mUpdateProgressHandler.sendEmptyMessage(DOWNLOADING);
                         // 下载完成
                         if (numRead < 0){
-                            mUpdateProgressHandler.sendEmptyMessage(DOWNLOAD_FINISH);
+                            mNotificationManager.cancel(NOTIFY_ID);
+                           // mUpdateProgressHandler.sendEmptyMessage(DOWNLOAD_FINISH);
+                            installAPK();
                             break;
                         }
                         fileOutputStream.write(buffer, 0, numRead);
+                        RemoteViews contentview = notification.contentView;
+                        // contentview.setTextViewText(R.id.tv_progress_download,mProgerss + "%");
+                        contentview.setProgressBar(R.id.download_progress, length, mProgerss, false);
+                        mNotificationManager.notify(NOTIFY_ID, notification);
                     }
                    /* while ((len = inputStream.read(buffer)) != -1) {
                         fileOutputStream.write(buffer, 0, len);
@@ -343,5 +379,15 @@ public class UpdateAppManager {
         }
 
         mContext.startActivity(intent);
+    }
+    private void createNotification(){
+        Intent intent=new Intent();
+        notification=new Notification();
+        notification.icon=R.drawable.news;
+        notification.tickerText="正在下载中";
+        RemoteViews contentView=new RemoteViews(mContext.getPackageName(),R.layout.notify_layout);
+        notification.contentView=contentView;
+        notification.contentIntent=pd;
+        mNotificationManager.notify(NOTIFY_ID,notification);
     }
 }

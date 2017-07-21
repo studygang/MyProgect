@@ -1,11 +1,11 @@
 package com.gangzi.myprogect.ui.news.view.imp;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -47,6 +47,7 @@ public class NewsDetailActivity extends AppCompatActivity {
            // mDialog.dismiss();
             setWebView();
         }
+        test();
 
     }
 
@@ -96,5 +97,40 @@ public class NewsDetailActivity extends AppCompatActivity {
             }
         });
     }
+    // JS 调用原生方法
+    //JS 调用源生的方法时该方法必须要加上 @JavascriptInterface 注解，
+    // 我们可以定义一个类或者接口来单独存放用于 JS 调用的方法，这里我以接口为例。
+    // 接口中提供一个 getUrl(String url) 方法用于提供给 JS 调用，传递一个 String 类型的值给源生方法：
+
+
+    /**
+     * Created by gangzi on 2017/3/22.
+     * JS 接口方法定义
+     * 接口中定义方法时不用加注解，使用时才加注解
+     */
+    public interface JavaScriptFunction{
+        void getUrl(String string);
+    }
+    // 此代码片段为 PandaEye 中点击加载的 html 数据中的图片跳转到新的 Activity 显示图片的功能
+    private void test(){
+        mWebView.addJavascriptInterface(new JavaScriptFunction() {
+            @Override
+            public void getUrl(String string) {
+               // LogWritter.LogStr(imageUrl);
+                Intent intent = new Intent();
+               // intent.putExtra("imageUrls", mImageUrls);
+               // intent.putExtra("curImageUrl", imageUrl);
+                //intent.setClass(ZhihuStoryInfoActivity.this, PhotoViewActivity.class);
+                startActivity(intent);
+            }
+        },"JavaScriptFunction");
+    }
+
+    // 在 HTML 中图片的点击事件 JS 方法中就可以执行如下代码来调用源生的接口方法
+   // function(){
+    //    window.JavaScriptFunction.getUrl(this.src);
+    //}
+
+    //原生调用 JS
 
 }
