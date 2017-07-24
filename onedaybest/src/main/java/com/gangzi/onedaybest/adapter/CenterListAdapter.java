@@ -52,13 +52,16 @@ public class CenterListAdapter extends RecyclerView.Adapter<CenterListAdapter.Vi
     }
 
     public void cleanData() {
-        dataListcenter.clear();
-        notifyItemRangeChanged(0,dataListcenter.size());
+        if (dataListcenter!=null&&dataListcenter.size()>0){
+            dataListcenter.clear();
+            //notifyDataSetChanged();
+            notifyItemRangeChanged(0,dataListcenter.size());
+        }
     }
 
-    public void addData(List<WeChatData.ResultBean.ListBean> data) {
+    /*public void addData(List<WeChatData.ResultBean.ListBean> data) {
         addData(0,data);
-    }
+    }*/
 
     public void addData(int positon, List<WeChatData.ResultBean.ListBean> data) {
         if (data!=null&&data.size()>0){

@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
-import com.gangzi.onedaybest.adapter.CenterListAdapter4;
+import com.gangzi.onedaybest.adapter.MainAdapter;
 import com.gangzi.onedaybest.bean.WeChatData;
 import com.gangzi.onedaybest.message.Message;
 import com.gangzi.onedaybest.pressenter.WeChatPressenter;
@@ -53,9 +53,9 @@ public class MainActivity extends AppCompatActivity implements WeChatView{
 
     private MyProgressDialog mProgressDialog;
     private WeChatPressenter mWeChatPressenter;
-   // private MainAdapter adapter;
+    private MainAdapter adapter;
     //private CenterListAdapter2 adapter;
-    private CenterListAdapter4 adapter;
+  //  private CenterListAdapter4 adapter;
     //private TestAdapter adapter;
     //private CenterListAdapter4 mCenterListAdapter4;
     private int lastVisibleItem;
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements WeChatView{
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);
         mProgressDialog=new MyProgressDialog(this,"正在加载中...");
-        mWeChatPressenter=new WeChatPresenterImp(this);
+        mWeChatPressenter=new WeChatPresenterImp(this,false);
         initData();
         ButterKnife.bind(this);
         mRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
@@ -158,11 +158,21 @@ public class MainActivity extends AppCompatActivity implements WeChatView{
         showData2(data);
     }
 
+    @Override
+    public void refreshData(WeChatData weChatData) {
+
+    }
+
+    @Override
+    public void loadMoreData(WeChatData weChatData) {
+
+    }
+
     private void showData2(List<WeChatData.ResultBean.ListBean> data) {
 
         switch (status){
             case NORMAL:
-                adapter=new CenterListAdapter4(this,data);
+                adapter=new MainAdapter(this,data);
                 mRecyclerView.setAdapter(adapter);
                 break;
             case REFRESH:
@@ -171,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements WeChatView{
                 mRefreshLayout.finishRefresh();
                 break;
             case LOADING:
-                if (pno<=totalPager){
+                /*if (pno<=totalPager){
                     adapter.setBottomView(true);
                     adapter.setLoading(true);
                     adapter.addData(adapter.getcountData(), data);
@@ -179,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements WeChatView{
                     adapter.setBottomView(false);
                     adapter.setLoading(false);
                    // status=NORMAL;
-                }
+                }*/
                 break;
         }
 
@@ -188,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements WeChatView{
     private void showData(List<WeChatData.ResultBean.ListBean> data) {
         switch (status){
             case NORMAL:
-                adapter=new CenterListAdapter4(this,data);
+                adapter=new MainAdapter(this,data);
                 //adapter=new MainAdapter(this,data);
                 mRecyclerView.setAdapter(adapter);
                 LinearLayoutManager manager=new LinearLayoutManager(this);
@@ -208,12 +218,12 @@ public class MainActivity extends AppCompatActivity implements WeChatView{
                 //adapter.notifyDataSetChanged();
                 mRefreshLayout.finishRefreshLoadMore();
                // mRecyclerView.refreshComlete();
-               if (pno<=totalPager){
+               /*if (pno<=totalPager){
                     adapter.setBottomView(true);
                 }else{
                     adapter.setBottomView(false);
                     //status=NORMAL;
-                }
+                }*/
                 break;
         }
     }

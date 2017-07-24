@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent"
-                                                 >
+                                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+    >
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -24,45 +24,45 @@
                 app:layout_scrollFlags="scroll|enterAlways">
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
-       <!-- <me.shihao.library.XRecyclerView
-            android:id="@+id/recycle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>-->
+        <!-- <me.shihao.library.XRecyclerView
+             android:id="@+id/recycle"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"/>-->
 
-   <com.cjj.MaterialRefreshLayout
-            android:id="@+id/swip_refresh"
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:overlay="true"
-            app:isLoadMore="false"
-            app:progress_size_type="normal"
-            app:wave_color="#90ffffff"
-            app:wave_show="true"
-            app:progress_colors="@array/material_colors"
-            app:wave_height_type="normal"
+            android:layout_height="match_parent"
+            app:srlPrimaryColor="@color/colorPrimary"
+            app:srlAccentColor="@android:color/white"
+            app:srlEnableHeaderTranslationContent="false"
+            app:srlEnableLoadmore="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <com.scwang.smartrefresh.header.MaterialHeader
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle"
+                android:id="@+id/recycle_wechat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 >
             </android.support.v7.widget.RecyclerView>
-        </com.cjj.MaterialRefreshLayout>
-       <!-- <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swip_refresh"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-            </android.support.v7.widget.RecyclerView>
-        </android.support.v4.widget.SwipeRefreshLayout>-->
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+        <!-- <android.support.v4.widget.SwipeRefreshLayout
+             android:id="@+id/swip_refresh"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             app:layout_behavior="@string/appbar_scrolling_view_behavior">
+             <android.support.v7.widget.RecyclerView
+                 android:id="@+id/recycle"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 >
+             </android.support.v7.widget.RecyclerView>
+         </android.support.v4.widget.SwipeRefreshLayout>-->
     </android.support.design.widget.CoordinatorLayout>
 
-   <android.support.design.widget.NavigationView
+    <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

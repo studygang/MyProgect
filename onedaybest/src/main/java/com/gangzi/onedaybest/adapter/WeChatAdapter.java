@@ -13,17 +13,17 @@ import com.gangzi.onedaybest.bean.WeChatData;
 import java.util.List;
 
 /**
- * Created by gangzi on 2017/6/23.
+ * Created by dan on 2017/7/24.
  */
 
-public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class WeChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private LayoutInflater mInflater;
 
-    private CenterListAdapter centerAdapter;
-
     private List<WeChatData.ResultBean.ListBean> dataList;
+
+    private CenterListAdapter centerAdapter;
 
     public static final int MORE=0;
     public static final int CENTERLIST=1;
@@ -31,7 +31,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private int currentType=MORE;
 
-    public MainAdapter(Context context, List<WeChatData.ResultBean.ListBean> data) {
+    public WeChatAdapter(Context context, List<WeChatData.ResultBean.ListBean> data) {
         this.mContext=context;
         this.dataList=data;
         mInflater=LayoutInflater.from(mContext);
@@ -86,31 +86,25 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return 3;
     }
 
-    public void cleanData() {
-        //CenterListAdapter centerAdapter=new CenterListAdapter(mContext,dataList);
-        if (centerAdapter!=null){
-            centerAdapter.cleanData();
+    public void clear() {
+        if (dataList!=null&&dataList.size()>0){
+            dataList.clear();
+            notifyDataSetChanged();
+            //notifyItemRangeChanged(0,dataList.size()+1);
+            //centerAdapter.cleanData();
         }
-       // centerAdapter=new CenterListAdapter(mContext,dataList);
-       /* dataList.clear();
-        dataList.addAll(data);
-        notifyItemRangeChanged(0,dataList.size());*/
     }
 
-   /* public void addData(List<WeChatData.ResultBean.ListBean> data) {
-        if (centerAdapter!=null){
-            centerAdapter.addData(data);
+    public void addData(int position, List<WeChatData.ResultBean.ListBean> data) {
+        if (data!=null&&data.size()>0){
+            //dataList.addAll(position,data);
+            //notifyItemRangeChanged(position,dataList.size());
+            centerAdapter.addData(position,data);
         }
-    }*/
+    }
 
     public int getcountData() {
-        return centerAdapter.getcountData();
-    }
-
-    public void addData(int i, List<WeChatData.ResultBean.ListBean> data) {
-        if (centerAdapter!=null){
-            centerAdapter.addData(i,data);
-        }
+        return centerAdapter.getItemCount();
     }
 
 
@@ -123,6 +117,8 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             this.mContext=context;
         }
     }
+
+
     class CenterViewHolder extends RecyclerView.ViewHolder{
 
         private Context mContext;
@@ -141,6 +137,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             recycle.setAdapter(centerAdapter);
         }
     }
+
     class BottomViewHolder extends RecyclerView.ViewHolder{
 
         private Context mContext;

@@ -9,4 +9,6 @@ import com.gangzi.onedaybest.bean.WeChatData;
 public interface WeChatOnListener {
     void onSuccess(WeChatData s);
     void onFailure(Throwable e);
+    void refresh(WeChatData s);
+    void loadMore(WeChatData s);
 }

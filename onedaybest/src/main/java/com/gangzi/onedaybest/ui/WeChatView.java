@@ -10,4 +10,6 @@ public interface WeChatView {
     void showProgress();
     void hideProgress();
     void loadWeChat(WeChatData weChatData);
+    void refreshData(WeChatData weChatData);
+    void loadMoreData(WeChatData weChatData);
 }
