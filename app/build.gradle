@@ -15,8 +15,19 @@ android {
         versionName "2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        release {
+            storeFile file("keyStore")
+            keyAlias "key0"
+            keyPassword "123456"
+            storePassword "123456"
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -86,12 +97,19 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     //最新版本
+
     //okHttp
+
     //retrofit
+
     //Gson converter
+
     //RxJava2 Adapter
+
     //RxJava2
+
     //okhttputils
+
     // sdk15, sdk19, sdk21, sdk23 are also available
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
@@ -120,4 +138,19 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile('com.github.hotchemi:permissionsdispatcher:2.4.0') { exclude module: 'support-v13' }
     apt 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
+    compile files('src/libs/MobCommons-2017.0801.1522.jar')
+    compile files('src/libs/MobTools-2017.0801.1522.jar')
+    compile files('src/libs/ShareSDK-Core-3.0.1.jar')
+    compile files('src/libs/ShareSDK-Email-3.0.1.jar')
+    compile files('src/libs/ShareSDK-Facebook-3.0.1.jar')
+    compile files('src/libs/ShareSDK-QQ-3.0.1.jar')
+    compile files('src/libs/ShareSDK-QZone-3.0.1.jar')
+    compile files('src/libs/ShareSDK-ShortMessage-3.0.1.jar')
+    compile files('src/libs/ShareSDK-SinaWeibo-3.0.1.jar')
+    compile files('src/libs/ShareSDK-TencentWeibo-3.0.1.jar')
+    compile files('src/libs/ShareSDK-Twitter-3.0.1.jar')
+    compile files('src/libs/ShareSDK-Wechat-3.0.1.jar')
+    compile files('src/libs/ShareSDK-Wechat-Core-3.0.1.jar')
+    compile files('src/libs/ShareSDK-Wechat-Favorite-3.0.1.jar')
+    compile files('src/libs/ShareSDK-Wechat-Moments-3.0.1.jar')
 }

@@ -1,15 +1,21 @@
 package com.gangzi.myprogect.ui.news.view.imp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 
 import com.gangzi.myprogect.R;
@@ -17,8 +23,12 @@ import com.gangzi.myprogect.utils.MyProgressDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.wechat.friends.Wechat;
+import cn.sharesdk.wechat.moments.WechatMoments;
 
-public class NewsDetailActivity extends AppCompatActivity {
+public class NewsDetailActivity extends AppCompatActivity implements View.OnClickListener{
 
     @BindView(R.id.webView)
     WebView mWebView;
@@ -30,10 +40,16 @@ public class NewsDetailActivity extends AppCompatActivity {
     private String category,url,title;
     private MyProgressDialog mDialog;
 
+    private Context mContext;
+
+    private PopupWindow mPopupWindow;
+    private OnekeyShare oks;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_detail);
+        mContext=this;
         ButterKnife.bind(this);
         mDialog=new MyProgressDialog(this,"正在加载中...");
         mDialog.show();
@@ -53,10 +69,24 @@ public class NewsDetailActivity extends AppCompatActivity {
 
     private void setToolBar() {
         mToolbar.setTitle(category);
-        setSupportActionBar(mToolbar);
-        ActionBar actionBar=getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+        mToolbar.inflateMenu(R.menu.base_toolbar_menu);//设置角的填充菜单
+       // mToolbar.getMenu().getItem(R.id.action_share).getIcon().setBounds(20,20,20,20);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int menuItemId = item.getItemId();
+                switch (menuItemId){
+                    case R.id.action_share:
+                        showPopWindow();
+                        break;
+                }
+                return true;
+            }
+        });
+       // setSupportActionBar(mToolbar);
+       // ActionBar actionBar=getSupportActionBar();
+        //actionBar.setDisplayHomeAsUpEnabled(true);
+        //actionBar.setHomeButtonEnabled(true);
         mToolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +94,34 @@ public class NewsDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+    }
+
+    private void showPopWindow() {
+        //设置contentView
+        View contentView = LayoutInflater.from(NewsDetailActivity.this).inflate(R.layout.share_pop_item, null);
+        mPopupWindow = new PopupWindow(contentView,
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        mPopupWindow.setContentView(contentView);
+        //设置各个控件的点击响应
+        ImageView weixin= (ImageView) contentView.findViewById(R.id.weixinpy);
+        ImageView weixinFriend= (ImageView) contentView.findViewById(R.id.pyq);
+        ImageView sina= (ImageView) contentView.findViewById(R.id.sina);
+        ImageView qq= (ImageView) contentView.findViewById(R.id.qq);
+        ImageView qzone= (ImageView) contentView.findViewById(R.id.qzone);
+        ImageView sms= (ImageView) contentView.findViewById(R.id.sms);
+
+        weixin.setOnClickListener(this);
+        weixinFriend.setOnClickListener(this);
+        sina.setOnClickListener(this);
+        qq.setOnClickListener(this);
+        qzone.setOnClickListener(this);
+        sms.setOnClickListener(this);
+
+        //显示PopupWindow
+        View rootview = LayoutInflater.from(NewsDetailActivity.this).inflate(R.layout.activity_news_detail, null);
+        mPopupWindow.showAtLocation(rootview, Gravity.BOTTOM, 0, 0);
+        oks = new OnekeyShare();
     }
 
     private void setWebView() {
@@ -96,6 +154,47 @@ public class NewsDetailActivity extends AppCompatActivity {
                 return super.shouldOverrideUrlLoading(view, request);
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.weixinpy:
+                oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
+                oks.setTitleUrl("http://www.baidu.com");
+                oks.setText("text");
+                oks.setTitle("标题");
+                oks.setPlatform(Wechat.NAME);
+                oks.show(mContext);
+                mPopupWindow.dismiss();
+                break;
+            case R.id.pyq:
+                oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
+                oks.setTitleUrl("http://www.baidu.com");
+                oks.setText("text");
+                oks.setTitle("标题");
+                oks.setPlatform(WechatMoments.NAME);
+                oks.show(mContext);
+                mPopupWindow.dismiss();
+                break;
+            case R.id.sina:
+                break;
+            case R.id.qq:
+               // oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
+               oks.setUrl(url);
+                //oks.setTitleUrl("http://www.baidu.com");
+               // oks.setText(url);
+                oks.setTitle(title);
+                oks.setPlatform(QQ.NAME);
+                oks.show(mContext);
+                mPopupWindow.dismiss();
+                break;
+            case R.id.qzone:
+                break;
+            case R.id.sms:
+                break;
+        }
+
     }
     // JS 调用原生方法
     //JS 调用源生的方法时该方法必须要加上 @JavascriptInterface 注解，

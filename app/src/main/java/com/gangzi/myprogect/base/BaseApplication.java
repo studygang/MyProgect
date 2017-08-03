@@ -1,7 +1,8 @@
 package com.gangzi.myprogect.base;
 
-import android.app.Application;
 import android.content.Context;
+
+import com.mob.MobApplication;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -13,7 +14,7 @@ import okhttp3.OkHttpClient;
  * Created by Administrator on 2017/6/6.
  */
 
-public class BaseApplication extends Application {
+public class BaseApplication extends MobApplication {
     private static BaseApplication baseApplication;
     private static OkHttpClient mOkHttpClient;
 
