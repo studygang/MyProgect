@@ -14,6 +14,7 @@ import com.gangzi.onedaybest.pressenter.imp.WeChatPresenterImp;
 import com.gangzi.onedaybest.ui.WeChatView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
@@ -28,6 +29,8 @@ public class WeChatActivity extends AppCompatActivity implements WeChatView{
     RecyclerView mRecyclerView;
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout mRefreshLayout;
+
+    private ClassicsHeader mClassicsHeader;
 
 
     private int ps=20;
@@ -51,6 +54,15 @@ public class WeChatActivity extends AppCompatActivity implements WeChatView{
         mWeChatPressenter=new WeChatPresenterImp(this,false);
         initData();
         ButterKnife.bind(this);
+        mRefreshLayout.setEnableHeaderTranslationContent(true);
+       /* int deta = new Random().nextInt(7 * 24 * 60 * 60 * 1000);
+        mClassicsHeader = (ClassicsHeader)mRefreshLayout.getRefreshHeader();
+        mClassicsHeader.setLastUpdateTime(new Date(System.currentTimeMillis()-deta));
+        mClassicsHeader.setTimeFormat(new SimpleDateFormat("更新于 MM-dd HH:mm", Locale.CHINA));
+        mClassicsHeader.setTimeFormat(new DynamicTimeFormat("更新于 %s"));*/
+       // mClassicsHeader.setSpinnerStyle(SpinnerStyle.FixedBehind);
+      //  mRefreshLayout.setPrimaryColors(0xff444444, 0xffffffff);
+
         //mRefreshLayout.autoRefresh();
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override

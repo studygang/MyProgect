@@ -38,14 +38,13 @@
             app:srlEnableHeaderTranslationContent="false"
             app:srlEnableLoadmore="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-            <com.scwang.smartrefresh.header.MaterialHeader
+            <com.scwang.smartrefresh.header.CircleHeader
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycle_wechat"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
+                android:layout_height="wrap_content">
             </android.support.v7.widget.RecyclerView>
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
         <!-- <android.support.v4.widget.SwipeRefreshLayout
