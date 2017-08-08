@@ -4,6 +4,10 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.MOUNT_FORMAT_FILESYSTEMS"/>
 
     <application
         android:allowBackup="true"
@@ -15,6 +19,9 @@
         <activity android:name=".MainActivity">
         </activity>
         <activity android:name=".ui.imp.WeChatActivity">
+
+        </activity>
+        <activity android:name=".TestNetActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
