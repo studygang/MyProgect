@@ -145,7 +145,7 @@ public class TestNetActivity extends AppCompatActivity implements View.OnClickLi
     public void getSdPerssion(){
         String url="http://zxpic.gtimg.com/infonew/0/wechat_pics_-214358.jpg/168";
         String SDPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String fileName="lulu.jpg";
+        String fileName="yuxia.jpg";
         OkhttpManager.getInstance().downFile(url,fileName,SDPath, new OkhttpManager.OnDownloadListener() {
             @Override
             public void onDownloadSuccess() {
@@ -154,8 +154,8 @@ public class TestNetActivity extends AppCompatActivity implements View.OnClickLi
             }
 
             @Override
-            public void onDownloading(int progress, long total, int id) {
-                System.out.println("progress--------"+progress+"total----------"+total);
+            public void onDownloading(int progress,long readLenght,long total, int id) {
+                System.out.println("progress--------"+progress+"readLenght"+readLenght+"total----------"+total);
             }
 
             @Override

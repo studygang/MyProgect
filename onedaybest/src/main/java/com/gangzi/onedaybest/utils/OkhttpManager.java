@@ -8,13 +8,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.FileNameMap;
+import java.net.URLConnection;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.Headers;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -282,6 +286,154 @@ public class OkhttpManager {
         });
     }
 
+    /**
+     * 上传文件
+     *
+     * @param url
+     * @param pathName
+     * @param fileName
+     * @param callback
+     */
+    public void doFile(String url, String pathName, String fileName, Callback callback) {
+        //判断文件类型
+        MediaType MEDIA_TYPE = MediaType.parse(judgeType(pathName));
+        //创建文件参数
+        MultipartBody.Builder builder = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart(MEDIA_TYPE.type(), fileName,
+                        RequestBody.create(MEDIA_TYPE, new File(pathName)));
+        //发出请求参数
+        Request request = new Request.Builder()
+                .header("Authorization", "Client-ID " + "9199fdef135c122")
+                .url(url)
+                .post(builder.build())
+                .build();
+        Call call = mOkHttpClient.newCall(request);
+        call.enqueue(callback);
+    }
+
+    /**
+     * 根据文件路径判断MediaType
+     *
+     * @param path
+     * @return
+     */
+    private static String judgeType(String path) {
+        FileNameMap fileNameMap = URLConnection.getFileNameMap();
+        String contentTypeFor = fileNameMap.getContentTypeFor(path);
+        if (contentTypeFor == null) {
+            contentTypeFor = "application/octet-stream";
+        }
+        return contentTypeFor;
+    }
+
+    /**
+     * 异步的单文件上传 携带参数
+     * @param url
+     * @param file
+     * @param maps
+     */
+    public void doPostAsynFile(String url, File file, Map<String, String> maps, final OnUploadListener uploadListener){
+
+        MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+
+        if (maps!=null){
+            for (String key:maps.keySet()){
+               // builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"file\";filename=\""+fileName+"\""));
+                builder.addFormDataPart(key,maps.get(key));
+            }
+        }
+
+        if (file!=null){
+            RequestBody fileBody = null;
+            String fileName = file.getName();
+            fileBody = RequestBody.create(MediaType.parse(guessMimeType(fileName)), file);
+            builder.addPart( Headers.of("Content-Disposition", "form-data; name=\"file\";filename=\""+fileName+"\""),
+                    fileBody);
+        }
+        RequestBody requestBody = builder.build();
+        Request.Builder requestBuilder=new Request.Builder().url(url).post(requestBody);
+        Request request=requestBuilder.build();
+        mOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                uploadListener.onUploadFailed();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()){
+                    uploadListener.onUploadSuccess();
+                }
+            }
+        });
+    }
+
+    /**
+     * 异步多文件上传
+     * @param url
+     * @param files
+     * @param fileKeys
+     * @param maps
+     */
+    public void doPostAsynFile(String url, File[] files, String[] fileKeys,Map<String, String> maps, final OnUploadListener uploadListener){
+
+        MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+
+        if (maps!=null){
+            for (String key:maps.keySet()){
+                // builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"file\";filename=\""+fileName+"\""));
+                builder.addFormDataPart(key,maps.get(key));
+            }
+        }
+        if (files != null)
+        {
+            RequestBody fileBody = null;
+            for (int i = 0; i < files.length; i++)
+            {
+                File file = files[i];
+                String fileName = file.getName();
+                fileBody = RequestBody.create(MediaType.parse(guessMimeType(fileName)), file);
+                //TODO 根据文件名设置contentType
+                builder.addPart(Headers.of("Content-Disposition",
+                        "form-data; name=\"" + fileKeys[i] + "\"; filename=\"" + fileName + "\""),
+                        fileBody);
+            }
+        }
+        RequestBody requestBody = builder.build();
+        Request.Builder requestBuilder=new Request.Builder().url(url).post(requestBody);
+        Request request=requestBuilder.build();
+        mOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                uploadListener.onUploadFailed();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()){
+                    uploadListener.onUploadSuccess();
+                }
+            }
+        });
+
+    }
+
+    /**
+     * 根据文件路径判断MediaType
+     * @param path
+     * @return
+     */
+    private String guessMimeType(String path)
+    {
+        FileNameMap fileNameMap = URLConnection.getFileNameMap();
+        String contentTypeFor = fileNameMap.getContentTypeFor(path);
+        if (contentTypeFor == null)
+        {
+            contentTypeFor = "application/octet-stream";
+        }
+        return contentTypeFor;
+    }
 
     /**
      * 下载文件
@@ -315,7 +467,7 @@ public class OkhttpManager {
                         fos.write(buf, 0, len);
                         readLength += len;
                         int curProgress = (int) (((float) readLength / fileLength) * 100);
-                        downloadListener.onDownloading(curProgress, fileLength, 0);
+                        downloadListener.onDownloading(curProgress,readLength, fileLength, 0);
                     }
                     fos.flush();
                     downloadListener.onDownloadSuccess();
@@ -381,12 +533,31 @@ public class OkhttpManager {
          * 下载进度
          */
        // void onDownloading(int progress);
-        void onDownloading(int progress, long total , int id);
+        void onDownloading(int progress,long readLenght,long total , int id);
 
         /**
          * 下载失败
          */
         void onDownloadFailed();
+    }
+
+    public interface OnUploadListener {
+        /**
+         * 上传成功
+         */
+        void onUploadSuccess();
+
+        /**
+         * @param progress
+         * 上传进度
+         */
+        // void onDownloading(int progress);
+        //void onDownloading(int progress,long readLenght,long total , int id);
+
+        /**
+         * 上传失败
+         */
+        void onUploadFailed();
     }
 
 }
