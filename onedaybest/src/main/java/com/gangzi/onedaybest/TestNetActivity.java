@@ -3,7 +3,10 @@ package com.gangzi.onedaybest;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -11,6 +14,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,8 +24,10 @@ import android.widget.Toast;
 import com.gangzi.onedaybest.utils.OkhttpManager;
 import com.gangzi.onedaybest.utils.OkhttpManager.NetworkRequestListener;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,6 +80,8 @@ public class TestNetActivity extends AppCompatActivity implements View.OnClickLi
         bt_get.setOnClickListener(this);
         bt_post.setOnClickListener(this);
         bt_download.setOnClickListener(this);
+        String deviceID=genUniqueDeviceId(this);
+        System.out.println("----------------deviceID---"+deviceID);
     }
 
     @Override
@@ -206,6 +215,51 @@ public class TestNetActivity extends AppCompatActivity implements View.OnClickLi
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         TestNetActivityPermissionsDispatcher.onRequestPermissionsResult(this,requestCode,grantResults);
+    }
+
+
+    public static String genUniqueDeviceId(Context context) {
+
+        final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        String deviceId =null,  androidId = null, mac= null, serial= null ;
+
+        WifiManager wifiMan = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+
+        try {
+            if (PackageManager.PERMISSION_GRANTED == context.getPackageManager()
+                    .checkPermission(Manifest.permission.READ_PHONE_STATE,
+                            context.getPackageName())) {
+
+                deviceId = tm.getDeviceId();
+
+            }
+            androidId =  android.provider.Settings.Secure.getString(context.getContentResolver(),
+                    android.provider.Settings.Secure.ANDROID_ID);
+
+            mac=wifiMan.getConnectionInfo().getMacAddress();
+
+            Class<?> c = Class.forName("android.os.SystemProperties");
+            Method get = c.getMethod("get", String.class, String.class );
+            serial = (String) get.invoke(c, "ro.serialno", "unknown" );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(TextUtils.isEmpty(deviceId )&& TextUtils.isEmpty(androidId)
+                &&TextUtils.isEmpty(mac)&&TextUtils.isEmpty(serial)){
+            return UUID.randomUUID().toString();
+        }
+        deviceId =  "IEMI:" + deviceId ;
+
+        androidId = "ANDROID_ID:" +androidId;
+
+        mac= "MAC:"+mac;
+
+        serial =  "SERIAL:"+serial;
+
+        UUID deviceUuid = new UUID(androidId.hashCode(), deviceId .hashCode()| mac.hashCode()|serial.hashCode());
+        String uniqueId = deviceUuid.toString();
+
+        return uniqueId;
     }
 
 }

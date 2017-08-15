@@ -20,6 +20,10 @@ allprojects {
         jcenter()
         mavenCentral()
         // { url 'https://www.jitpack.io' }
+        maven {
+            url 'https://jitpack.io'
+
+        }
     }
 }
 
