@@ -30,7 +30,7 @@ import com.allenliu.versionchecklib.AVersionService;
 import com.allenliu.versionchecklib.HttpRequestMethod;
 import com.allenliu.versionchecklib.VersionParams;
 import com.gangzi.myprogect.base.BaseFragment;
-import com.gangzi.myprogect.service.UpdateAppManager;
+import com.gangzi.myprogect.service.CheckAppIsUpdate;
 import com.gangzi.myprogect.service.UpdateAppService;
 import com.gangzi.myprogect.ui.cart.CartFragment;
 import com.gangzi.myprogect.ui.home.HomeFragment;
@@ -82,7 +82,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initListener();
         initNavigationView();
         requestPermission();
-        new UpdateAppManager(this).checkUpdate();
+       // new UpdateAppManager(this).checkUpdate();
+       new CheckAppIsUpdate(this).checkUpdate();
         //checkUpdateApp();
     }
     //@TargetApi(Build.VERSION_CODES.M)

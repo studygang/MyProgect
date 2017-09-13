@@ -7,12 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.gangzi.onedaybest.R;
-import com.gangzi.onedaybest.adapter.WeChatAdapter;
+import com.gangzi.onedaybest.adapter.WeChatAdapter2;
 import com.gangzi.onedaybest.bean.WeChatData;
 import com.gangzi.onedaybest.pressenter.WeChatPressenter;
 import com.gangzi.onedaybest.pressenter.imp.WeChatPresenterImp;
 import com.gangzi.onedaybest.ui.WeChatView;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
@@ -23,12 +22,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class WeChatActivity extends AppCompatActivity implements WeChatView{
+public class WeChatActivity2 extends AppCompatActivity implements WeChatView{
 
-    @BindView(R.id.recycle_wechat)
+    @BindView(R.id.recycle)
     RecyclerView mRecyclerView;
-    @BindView(R.id.refreshLayout)
-    SmartRefreshLayout mRefreshLayout;
+    @BindView(R.id.refreshLayouts)
+    RefreshLayout mRefreshLayout;
+
+    public boolean isLoading;
 
     private ClassicsHeader mClassicsHeader;
 
@@ -43,48 +44,45 @@ public class WeChatActivity extends AppCompatActivity implements WeChatView{
     private int currentPager;
     private int totalPager=2;
 
-    private WeChatAdapter mWeChatAdapter;
+    private WeChatAdapter2 mWeChatAdapter;
     private List<WeChatData.ResultBean.ListBean> data;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_we_chat);
+        setContentView(R.layout.activity_we_chat2);
         mWeChatPressenter=new WeChatPresenterImp(this,false);
         initData();
         ButterKnife.bind(this);
         mRefreshLayout.setEnableHeaderTranslationContent(true);
-       /* int deta = new Random().nextInt(7 * 24 * 60 * 60 * 1000);
-        mClassicsHeader = (ClassicsHeader)mRefreshLayout.getRefreshHeader();
-        mClassicsHeader.setLastUpdateTime(new Date(System.currentTimeMillis()-deta));
-        mClassicsHeader.setTimeFormat(new SimpleDateFormat("更新于 MM-dd HH:mm", Locale.CHINA));
-        mClassicsHeader.setTimeFormat(new DynamicTimeFormat("更新于 %s"));*/
-       // mClassicsHeader.setSpinnerStyle(SpinnerStyle.FixedBehind);
-      //  mRefreshLayout.setPrimaryColors(0xff444444, 0xffffffff);
-
-        //mRefreshLayout.autoRefresh();
+        mRefreshLayout.setEnableAutoLoadmore(true);//开启自动加载功能（非必须）
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-                  refreshData();
-                  refreshlayout.finishRefresh();
+                refreshData();
+                mRefreshLayout.finishRefresh();
+                mRefreshLayout.setLoadmoreFinished(false);
             }
         });
+
         mRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
                 if (pno<=3){
                     loadMoreData();
-                    refreshlayout.finishLoadmore();
+                    mRefreshLayout.finishLoadmore();
                 }else{
                    // mRefreshLayout.setEnableLoadmore(false);
                     //footer.setVisibility(View.GONE);
-                    Toast.makeText(WeChatActivity.this,"没有更多数据了！",Toast.LENGTH_SHORT).show();
-                    refreshlayout.finishLoadmore();
+                    mRefreshLayout.finishLoadmore();
+                    Toast.makeText(WeChatActivity2.this,"没有更多数据了！",Toast.LENGTH_SHORT).show();
+                    mRefreshLayout.setLoadmoreFinished(true);//将不会再次触发加载更多事件
                 }
             }
         });
+        //触发自动刷新
+      //  mRefreshLayout.autoRefresh();
     }
 
     private void initData() {
@@ -114,7 +112,7 @@ public class WeChatActivity extends AppCompatActivity implements WeChatView{
     @Override
     public void loadWeChat(WeChatData weChatData) {
         data=weChatData.getResult().getList();
-        mWeChatAdapter=new WeChatAdapter(this,data);
+        mWeChatAdapter=new WeChatAdapter2(this,data);
         LinearLayoutManager manager=new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mWeChatAdapter);

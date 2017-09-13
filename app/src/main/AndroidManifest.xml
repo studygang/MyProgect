@@ -102,6 +102,9 @@
                 android:resource="@xml/file_paths"
                 tools:replace="android:resource"/>
         </provider>
+        <service android:name=".service.UpdateAppManagerService">
+
+        </service>
     </application>
 
 </manifest>

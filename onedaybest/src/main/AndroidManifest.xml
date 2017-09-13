@@ -6,8 +6,8 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.MOUNT_FORMAT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
@@ -19,21 +19,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+
         </activity>
         <activity android:name=".ui.imp.WeChatActivity">
-
         </activity>
-        <activity android:name=".TestNetActivity">
-
-        </activity>
-        <activity android:name=".TestActivity">
+        <activity android:name=".ui.imp.WeChatActivity2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
+        <activity android:name=".TestNetActivity">
+        </activity>
+        <activity android:name=".TestActivity">
+        </activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -46,6 +46,9 @@
                 tools:replace="android:resource"/>
         </provider>
 
+        <activity android:name=".CustomViewActivity">
+
+        </activity>
     </application>
 
 </manifest>

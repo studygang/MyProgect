@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +20,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +44,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static android.os.Build.VERSION_CODES.N;
+
 /**
  * 应用自动更新
  * Created by gangzi on 2017/6/14.
@@ -56,6 +58,7 @@ public class UpdateAppManager {
 
     private static final int NOTIFY_ID = 0;
     private NotificationManager mNotificationManager;
+    private NotificationCompat.Builder builder;
     private Notification notification;
 
     //通知显示内容
@@ -82,9 +85,9 @@ public class UpdateAppManager {
     public UpdateAppManager(Context context) {
         mContext = context;
         initOkHttpClient();
-        mNotificationManager = (NotificationManager) context.getSystemService(android.content.Context.NOTIFICATION_SERVICE);
-        Intent intent = new Intent(mContext,UpdateAppManager.class);
-        pd = PendingIntent.getActivity(mContext, 0, intent, 0);
+       // mNotificationManager = (NotificationManager) context.getSystemService(android.content.Context.NOTIFICATION_SERVICE);
+        //Intent intent = new Intent(mContext,UpdateAppManager.class);
+        //pd = PendingIntent.getActivity(mContext, 0, intent, 0);
         //createNotification();
     }
 
@@ -125,7 +128,7 @@ public class UpdateAppManager {
             switch (msg.what){
                 case DOWNLOADING:
                     // 设置进度条
-                 // mProgressBar.setProgress(mProgerss);
+                    //mProgressBar.setProgress(mProgerss);
                     /*new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -135,11 +138,20 @@ public class UpdateAppManager {
                             mNotificationManager.notify(NOTIFY_ID, notification);
                         }
                     }).start();*/
-
+                    builder.setProgress(100, mProgerss, false);
+                    builder.setContentText("下载进度:" + mProgerss + "%");
+                    notification = builder.build();
+                    mNotificationManager.notify(NOTIFY_ID, notification);
                     break;
                 case DOWNLOAD_FINISH:
                     // 隐藏当前下载对话框
                     //mDownLoadDialog.dismiss();
+                    builder.setContentTitle("");
+                     builder.setContentText("下载完成");//下载完成
+                     builder.setProgress(0,0,false);    //移除进度条
+                     notification = builder.build();
+                     mNotificationManager.notify(NOTIFY_ID, notification);
+                    mNotificationManager.cancel(NOTIFY_ID);
                     // 安装 APK 文件
                     installAPK();
                     break;
@@ -217,7 +229,7 @@ public class UpdateAppManager {
                 dialogView.setVisibility(View.GONE);
                 alertDialog.dismiss();
                 //显示下载对话框
-                //showDownloadDialog();
+               // showDownloadDialog();
                 createNotification();
                 downloadAPK();
             }
@@ -320,26 +332,38 @@ public class UpdateAppManager {
                     File apkFile=new File(savaPath,mVersion_name);
                     fileOutputStream = new FileOutputStream(apkFile);
                     byte[] buffer = new byte[1024];
+                    long beforeTime = System.currentTimeMillis();
                     int count = 0;
                     while (!isCancel){
                         int numRead=inputStream.read(buffer);
                         count+=numRead;
-                       mProgerss=(int) (((float)count/length)*100);
+                        //mProgerss=(int) (((float)count/length)*100);
+                         mProgerss=(int) (((double) count / (double) length) * 100);
+                        //1秒 更新2次进度 非常重要 否则 系统会慢慢卡死
+                        if (System.currentTimeMillis() - beforeTime > 500) {
+                            mUpdateProgressHandler.sendEmptyMessage(DOWNLOADING);
+                            beforeTime = System.currentTimeMillis();
+                        }
                         //mProgerss=((count/length)*100);
                         // 更新进度条
-                        //mUpdateProgressHandler.sendEmptyMessage(DOWNLOADING);
+                       // mUpdateProgressHandler.sendEmptyMessage(DOWNLOADING);
+                       // builder.setProgress(length, mProgerss, false);
+                       // mNotificationManager.notify(NOTIFY_ID, builder.build());
                         // 下载完成
                         if (numRead < 0){
-                            mNotificationManager.cancel(NOTIFY_ID);
-                           // mUpdateProgressHandler.sendEmptyMessage(DOWNLOAD_FINISH);
-                            installAPK();
+                            //mNotificationManager.cancel(NOTIFY_ID);
+                            mUpdateProgressHandler.sendEmptyMessage(DOWNLOAD_FINISH);
+                           // builder.setContentText("Download complete")//下载完成
+                                    //.setProgress(0,0,false);    //移除进度条
+                           // mNotificationManager.notify(NOTIFY_ID, builder.build());
+                          //  installAPK();
                             break;
                         }
                         fileOutputStream.write(buffer, 0, numRead);
-                        RemoteViews contentview = notification.contentView;
+                       // RemoteViews contentview = notification.contentView;
                         // contentview.setTextViewText(R.id.tv_progress_download,mProgerss + "%");
-                        contentview.setProgressBar(R.id.download_progress, length, mProgerss, false);
-                        mNotificationManager.notify(NOTIFY_ID, notification);
+                        //contentview.setProgressBar(R.id.download_progress, length, mProgerss, false);
+                       // mNotificationManager.notify(NOTIFY_ID, notification);
                     }
                    /* while ((len = inputStream.read(buffer)) != -1) {
                         fileOutputStream.write(buffer, 0, len);
@@ -366,7 +390,7 @@ public class UpdateAppManager {
             return;
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= N) {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Uri contentUri = FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".fileprovider", apkFile);
             intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
@@ -381,13 +405,10 @@ public class UpdateAppManager {
         mContext.startActivity(intent);
     }
     private void createNotification(){
-        Intent intent=new Intent();
-        notification=new Notification();
-        notification.icon=R.drawable.news;
-        notification.tickerText="正在下载中";
-        RemoteViews contentView=new RemoteViews(mContext.getPackageName(),R.layout.notify_layout);
-        notification.contentView=contentView;
-        notification.contentIntent=pd;
-        mNotificationManager.notify(NOTIFY_ID,notification);
+        mNotificationManager = (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        builder=new NotificationCompat.Builder(mContext);
+        builder.setContentTitle("正在下载中...")
+                .setContentText("Download in progress")
+                .setSmallIcon(R.drawable.news);
     }
 }
