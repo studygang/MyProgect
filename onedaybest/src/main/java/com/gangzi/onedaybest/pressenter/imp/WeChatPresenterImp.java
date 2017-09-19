@@ -31,11 +31,13 @@ public class WeChatPresenterImp implements WeChatPressenter,WeChatOnListener{
 
     @Override
     public void refreshWechatData(int pno, int ps, String key, String dtype,boolean isRefreshData) {
+        mWeChatView.showProgress();
         mWeChatModel.refreshWechatData(pno,ps,key,dtype,isRefreshData);
     }
 
     @Override
     public void loadMoreWechatData(int pno, int ps, String key, String dtype,boolean isLoadMoreData) {
+        mWeChatView.showProgress();
         mWeChatModel.loadMoreWechatData(pno,ps,key,dtype,isLoadMoreData);
     }
 
@@ -57,11 +59,14 @@ public class WeChatPresenterImp implements WeChatPressenter,WeChatOnListener{
 
     @Override
     public void refresh(WeChatData s) {
+        mWeChatView.hideProgress();
         mWeChatView.refreshData(s);
     }
 
     @Override
     public void loadMore(WeChatData s) {
+        mWeChatView.hideProgress();
         mWeChatView.loadMoreData(s);
+
     }
 }

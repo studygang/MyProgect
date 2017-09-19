@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/MyProgect.iml" filepath="$PROJECT_DIR$/MyProgect.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/materialRefreshLayout_library/materialRefreshLayout_library.iml" filepath="$PROJECT_DIR$/materialRefreshLayout_library/materialRefreshLayout_library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mvpdemo/mvpdemo.iml" filepath="$PROJECT_DIR$/mvpdemo/mvpdemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/onedaybest/onedaybest.iml" filepath="$PROJECT_DIR$/onedaybest/onedaybest.iml" />
     </modules>
   </component>

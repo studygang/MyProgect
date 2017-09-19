@@ -46,6 +46,18 @@
                 android:layout_height="wrap_content"
                 app:srlClassicsSpinnerStyle="Translate"/>
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/spin_kit"
+            style="@style/SpinKitView.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fitsSystemWindows="true"
+            android:indeterminate="true"
+            app:SpinKit_Color="@color/green" />
+
+
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView

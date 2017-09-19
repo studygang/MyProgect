@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Toast;
 
 import com.gangzi.onedaybest.R;
@@ -12,6 +13,9 @@ import com.gangzi.onedaybest.bean.WeChatData;
 import com.gangzi.onedaybest.pressenter.WeChatPressenter;
 import com.gangzi.onedaybest.pressenter.imp.WeChatPresenterImp;
 import com.gangzi.onedaybest.ui.WeChatView;
+import com.github.ybq.android.spinkit.SpinKitView;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.Circle;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
@@ -46,12 +50,16 @@ public class WeChatActivity2 extends AppCompatActivity implements WeChatView{
 
     private WeChatAdapter2 mWeChatAdapter;
     private List<WeChatData.ResultBean.ListBean> data;
+    private SpinKitView spinKitView;
+    private Sprite drawable;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_we_chat2);
+        spinKitView = (SpinKitView) findViewById(R.id.spin_kit);
+        drawable =  new Circle();
         mWeChatPressenter=new WeChatPresenterImp(this,false);
         initData();
         ButterKnife.bind(this);
@@ -101,12 +109,14 @@ public class WeChatActivity2 extends AppCompatActivity implements WeChatView{
 
     @Override
     public void showProgress() {
-
+        spinKitView.setIndeterminateDrawable(drawable);
     }
 
     @Override
     public void hideProgress() {
+       spinKitView.setVisibility(View.GONE);
 
+        //spinKitView.setIndeterminateDrawable(null);
     }
 
     @Override

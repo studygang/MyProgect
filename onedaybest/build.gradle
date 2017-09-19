@@ -76,4 +76,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     apt 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
+    compile 'com.github.ybq:Android-SpinKit:1.1.0'
 }
