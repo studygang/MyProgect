@@ -1,7 +1,7 @@
 package com.gangzi.mvp.ui.model.imp;
 
 import com.gangzi.mvp.bean.WeChatData;
-import com.gangzi.mvp.interfaces.WeChatOnListener;
+import com.gangzi.mvp.interfaces.NetRequestOnListener;
 import com.gangzi.mvp.ui.model.WeChatModel;
 import com.gangzi.mvp.utils.OkhttpManager;
 import com.google.gson.Gson;
@@ -15,13 +15,13 @@ import java.util.Map;
 
 public class WeChatMoelImp implements WeChatModel {
 
-    private WeChatOnListener mWeChatOnListener;
+    private NetRequestOnListener<WeChatData> mWeChatOnListener;
 
     private boolean isLoadMore;
     private boolean isRefresh;
 
 
-    public WeChatMoelImp(WeChatOnListener weChatOnListener) {
+    public WeChatMoelImp(NetRequestOnListener<WeChatData> weChatOnListener) {
         this.mWeChatOnListener = weChatOnListener;
     }
 
@@ -83,7 +83,7 @@ public class WeChatMoelImp implements WeChatModel {
 
             @Override
             public void onRequestFail(String msg) {
-
+                mWeChatOnListener.onFail(msg);
             }
         });
     }

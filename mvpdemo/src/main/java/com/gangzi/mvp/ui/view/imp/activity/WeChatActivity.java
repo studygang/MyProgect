@@ -1,4 +1,4 @@
-package com.gangzi.mvp.ui.view.imp;
+package com.gangzi.mvp.ui.view.imp.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -30,6 +30,8 @@ public class WeChatActivity extends BaseActivity <WeChatView,WeChatPresenterImp>
     @BindView(R.id.tv_text)
     TextView mTextView;
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,11 +44,11 @@ public class WeChatActivity extends BaseActivity <WeChatView,WeChatPresenterImp>
     public void initData() {
         super.initData();
         presenter.getWeChatData(pno,ps,key,dtype);
+
     }
 
     @Override
     public void showLoading() {
-
     }
 
     @Override
@@ -56,6 +58,7 @@ public class WeChatActivity extends BaseActivity <WeChatView,WeChatPresenterImp>
 
     @Override
     public void showError() {
+
 
     }
 
